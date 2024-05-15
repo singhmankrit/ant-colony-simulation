@@ -16,7 +16,7 @@ or remotely via the planning issue #1.
 
 In any case, you need to fill in a short plan (a few lines) together with a
 reference to literature in the planning issue, *and* have it agreed by us before
-May 27 (i.e. latest two weeks before the presentation).
+May 22 (i.e. latest two weeks before the presentation).
 
 If you have problems to come up with a good project, we can provide you with
 proven project ideas. But we first want you to try coming up with your own project!
