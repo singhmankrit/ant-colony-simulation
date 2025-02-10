@@ -34,7 +34,7 @@ Discussions about the project design are best done in person with the course tea
 
 
 ## Week 3
-(due 4 June 2025, 11:00)
+(due 3 June 2025, 11:00)
 
 
 ## Reminder final deadline
