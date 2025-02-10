@@ -27,6 +27,7 @@ You will find how to include [links](https://docs.gitlab.com/ee/user/markdown.ht
 ## Week 1 - planning the project
 (due 21 May 2025, 23:59)
 
+Discussions about the project design are best done in person with the course team or via the planning issue #1. Once your project is approved, copy the project plan here.
 
 ## Week 2
 (due 27 May 2025, 11:00)
