@@ -1,38 +1,63 @@
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-
+import matplotlib.patches as patches
+import numpy as np
 
 def plot_world(grid, ant, step_number, show_scent=True):
     size = grid.size
-    display_grid = np.zeros((size, size, 3))  # RGB
+    fig, ax = plt.subplots(figsize=(6, 6))
+    fig.patch.set_facecolor('white')
+    ax.set_xlim(0, size)
+    ax.set_ylim(0, size)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_aspect('equal')
+    ax.set_title(f"Ant Simulation - Step {step_number}")
 
-    # Base layer: food scent as green
+    # Heatmaps (with extent to match grid)
     if show_scent:
-        norm_scent = grid.food_scent / (np.max(grid.food_scent) + 1e-5)
-        display_grid[:, :, 1] = norm_scent * 0.3  # Greenish background
+        ax.imshow(grid.food_scent, cmap='Reds', alpha=0.2, origin='upper', extent=(0, size, 0, size))
+    ax.imshow(grid.food_path, cmap='Blues', alpha=0.4, origin='upper', extent=(0, size, 0, size))
 
-    # Pheromone heatmap overlay: blue
-    norm_pheromones = grid.food_path / (np.max(grid.food_path) + 1e-5)
-    display_grid[:, :, 2] += norm_pheromones * 0.8  # Blue
-
-    # Obstacles: black
+    # Obstacles
     for x, y in grid.obstacle_positions:
-        display_grid[x, y] = [0, 0, 0]
+        rect = patches.Rectangle((y, size - x - 1), 1, 1, linewidth=1, edgecolor='black', facecolor='gray', zorder=1)
+        ax.add_patch(rect)
 
-    # Food: red
+    # Food using 🍎 emoji
+    emoji_size = max(6, int(300 / size))
     for x, y in grid.food_positions:
-        display_grid[x, y] = [1, 0, 0]
+        ax.text(
+            y + 0.5,
+            size - x - 0.5,
+            "🍎",
+            fontsize=emoji_size,
+            ha='center', va='center',
+            fontname="Segoe UI Emoji",
+            zorder=5
+        )
 
-    # Colony: yellow
+    # Colony using 🏠 emoji
     cx, cy = grid.colony_position
-    display_grid[cx, cy] = [1, 1, 0]
+    ax.text(
+        cy + 0.5,
+        size - cx - 0.5,
+        "🏠",
+        fontsize=emoji_size,
+        ha='center', va='center',
+        fontname="Segoe UI Emoji",
+        zorder=5
+    )
 
-    # Ant position: white
-    ax, ay = ant.pos
-    display_grid[ax, ay] = [1, 1, 1]
+    # Ant using 🐜 emoji
+    ax.text(
+        ant.pos[1] + 0.5,
+        size - ant.pos[0] - 0.5,
+        "🐜",
+        fontsize=emoji_size,
+        ha='center', va='center',
+        fontname="Segoe UI Emoji",
+        zorder=10
+    )
 
-    plt.imshow(display_grid, interpolation="nearest")
-    plt.title("Ant Colony Simulation")
-    plt.axis("off")
-    plt.savefig(f"images/ant_colony-{step_number}.png")
+    plt.savefig(f"images/ant_colony-{step_number:03}.png")
+    plt.close()

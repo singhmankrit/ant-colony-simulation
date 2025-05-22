@@ -12,9 +12,6 @@ environment.add_obstacle((4, 3))
 environment.add_obstacle((4, 4))
 environment.add_obstacle((3, 4))
 environment.add_obstacle((2, 4))
-print(environment.grid)
-print("Food Scent: ")
-print(environment.food_scent)
 
 ant = ants.Ant(environment)
 for i in range(200):
