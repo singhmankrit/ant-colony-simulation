@@ -18,8 +18,8 @@ ant2 = ants.Ant(environment)
 ant3 = ants.Ant(environment)
 for i in range(200):
     environment.evaporate_pheromones()
-    ant1.next_step()
-    ant2.next_step()
-    ant3.next_step()
+    ant1.next_step(i)
+    ant2.next_step(i)
+    ant3.next_step(i)
     if i % 10 == 0:
         plots.plot_world(environment, (ant1, ant2, ant3), i)
