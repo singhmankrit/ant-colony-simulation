@@ -1,19 +1,21 @@
 import numpy as np
 from enum import Enum
 
+
 class CellType(Enum):
     EMPTY = 0
     COLONY = 1
     FOOD = 2
     OBSTACLE = 3
 
+
 class Grid:
     def __init__(self, size):
         self.size = size
         self.grid = np.zeros((size, size), dtype=int)
-        self.food_scent = np.zeros((size, size), dtype=float) # natural scent
-        self.food_path = np.zeros((size, size), dtype=float) # pheromones
-        
+        self.food_scent = np.zeros((size, size), dtype=float)  # natural scent
+        self.food_path = np.zeros((size, size), dtype=float)  # pheromones
+
         self.colony_position = None
         self.food_positions = []
         self.obstacle_positions = []
@@ -34,11 +36,11 @@ class Grid:
         """
         Sets the food scent levels on the grid based on the positions of food.
 
-        This method updates the `food_scent` array to reflect the scent 
-        emitted by food sources. The scent is strongest (value of 1) 
-        at the food position, and it decreases with distance. At a 
-        distance of 1 cell, the scent is set to 0.5, and at a distance 
-        of 2 cells, it is set to 0.25. The scent is only applied within 
+        This method updates the `food_scent` array to reflect the scent
+        emitted by food sources. The scent is strongest (value of 1)
+        at the food position, and it decreases with distance. At a
+        distance of 1 cell, the scent is set to 0.5, and at a distance
+        of 2 cells, it is set to 0.25. The scent is only applied within
         the grid bounds.
         """
         for fx, fy in self.food_positions:
@@ -53,3 +55,9 @@ class Grid:
                         elif distance == 2:
                             self.food_scent[nx, ny] = max(self.food_scent[nx, ny], 0.25)
 
+    def evaporate_pheromones(self, decay_rate=0.01):
+        self.food_path *= 1 - decay_rate
+
+    def add_pheromone(self, position, strength=1.0):
+        x, y = position
+        self.food_path[x, y] += strength
