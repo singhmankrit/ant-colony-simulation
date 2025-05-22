@@ -38,7 +38,7 @@ class Ant:
             if 0 <= nx < self.grid.size and 0 <= ny < self.grid.size:
                 if (nx, ny) in self.grid.obstacle_positions:
                     continue
-                if (nx, ny) == self.path_memory[-1]:
+                if len(self.path_memory) > 1 and (nx, ny) == self.path_memory[-2]:
                     continue
 
                 food_val = self.grid.food_scent[nx, ny]
@@ -62,5 +62,5 @@ class Ant:
 
     def travel_back(self):
         chosen_pos = self.path_memory.pop()
-        self.grid.add_pheromone(chosen_pos, strength=0.5)
+        self.grid.add_pheromone(chosen_pos, strength=1)
         self.pos = chosen_pos

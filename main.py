@@ -17,7 +17,7 @@ print("Food Scent: ")
 print(environment.food_scent)
 
 ant = ants.Ant(environment)
-for i in range(100):
+for i in range(200):
     environment.evaporate_pheromones()
     ant.next_step()
     if i % 10 == 0:
