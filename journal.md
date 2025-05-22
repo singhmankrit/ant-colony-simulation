@@ -29,9 +29,40 @@ You will find how to include [links](https://docs.gitlab.com/ee/user/markdown.ht
 
 Discussions about the project design are best done in person with the course team or via the planning issue #1. Once your project is approved, copy the project plan here.
 
+Topic: Simulating an Ant Colony and studying Emergent Behaviour
+Parameters / Observables:
+
+Time taken for the first ant to reach food
+Number of ants that find the food path
+Minimum, maximum, average path lengths to food
+We can vary the number of ants to see when can they overcome difficult obstacles
+
+Phase 1: Our initial model will involve simulating a 2D grid with food sources and obstacles. Each ant can do a random walk in the 4 cardinal directions based on certain probability that depend on pheromone levels / "scent" of the grid. The food source will have a local "scent" so that ants near it can be attracted towards it. Once an ant discovers a food source, it will retrace it's path back to the colony and drop pheromones along the path for others to follow, and the pheromones will have an evaporation rate.
+Phase 2:
+Model enhancements:
+
+Finite food source
+"Hunger" for ants which may discourage them to go too far
+Amount of food present in the colony can be monitored and measured, based on which ants incentivised to explore far away locations
+Addition of dynamic obstacles to a known food path and how the ants overcome it
+
+We would also like to explore the possibility of modelling each ant as a Neural Network, thereby trying to study if there is a collective intelligence in the colony.
+References:
+
+Biologically inspired ant colony simulation: [Reference Paper](https://graphics.cs.uh.edu/wp-content/papers/2018/2018-CAVW-AntSimulation.pdf)
+
+Ant Colony Reinforcement Learning: [Code for reference](https://github.com/jeffasante/ant-colony-rl)
 ## Week 2
 (due 27 May 2025, 11:00)
 
+### Planning
+@mankritsingh will be creating the initial world, setting up the colony, food source, obstacles and how the ants will move(including pheromones) 
+
+@npaarts will work on computing obeservables for the simulation
+
+@rjuyal will work on making the animation and making things configurable
+
+### Progress Report 
 
 ## Week 3
 (due 3 June 2025, 11:00)
