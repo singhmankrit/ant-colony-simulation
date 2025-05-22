@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 
-def plot_world(grid, ant, step_number, show_scent=True):
+def plot_world(grid, ants, step_number, show_scent=True):
     size = grid.size
     fig, ax = plt.subplots(figsize=(6, 6))
     fig.patch.set_facecolor('white')
@@ -48,16 +48,17 @@ def plot_world(grid, ant, step_number, show_scent=True):
         zorder=5
     )
 
-    # Ant using 🐜 emoji
-    ax.text(
-        ant.pos[1] + 0.5,
-        size - ant.pos[0] - 0.5,
-        "🐜",
-        fontsize=emoji_size,
-        ha='center', va='center',
-        fontname="Segoe UI Emoji",
-        zorder=10
-    )
+    for ant in ants:
+        # Ant using 🐜 emoji
+        ax.text(
+            ant.pos[1] + 0.5,
+            size - ant.pos[0] - 0.5,
+            "🐜",
+            fontsize=emoji_size,
+            ha='center', va='center',
+            fontname="Segoe UI Emoji",
+            zorder=10
+        )
 
     plt.savefig(f"images/ant_colony-{step_number:03}.png")
     plt.close()

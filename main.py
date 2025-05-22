@@ -13,9 +13,13 @@ environment.add_obstacle((4, 4))
 environment.add_obstacle((3, 4))
 environment.add_obstacle((2, 4))
 
-ant = ants.Ant(environment)
+ant1 = ants.Ant(environment)
+ant2 = ants.Ant(environment)
+ant3 = ants.Ant(environment)
 for i in range(200):
     environment.evaporate_pheromones()
-    ant.next_step()
+    ant1.next_step()
+    ant2.next_step()
+    ant3.next_step()
     if i % 10 == 0:
-        plots.plot_world(environment, ant, i)
+        plots.plot_world(environment, (ant1, ant2, ant3), i)
