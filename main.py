@@ -1,5 +1,6 @@
 import code.grid as grid
 import code.ants as ants
+import code.plots as plots
 
 environment = grid.Grid(9)
 environment.place_colony((0, 0))
@@ -19,5 +20,5 @@ ant = ants.Ant(environment)
 for i in range(50):
     environment.evaporate_pheromones()
     ant.next_step()
-    if ant.has_food:
-        print(environment.food_path)
+    ant.deposit_pheromones()
+    plots.plot_world(environment, ant, i)
