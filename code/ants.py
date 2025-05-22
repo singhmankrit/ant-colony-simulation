@@ -7,7 +7,7 @@ class Ant:
         self.grid = grid
         self.pos = grid.colony_position  # assume all ants start at colony
         self.path_memory = [self.pos]
-        self.return_path_length = 0
+        self.pheromone_strength = 0
 
         # ant status
         self.has_food = False
@@ -20,13 +20,15 @@ class Ant:
 
         if not self.has_food and self.pos in self.grid.food_positions:
             self.has_food = True
-            self.return_path_length = len(self.path_memory)
+            path_length = len(self.path_memory)
+            if path_length > 0:
+                self.pheromone_strength = 1 / path_length
             print(f"Ant picked up food at step: {step_number}")
 
         elif self.has_food and self.pos == self.grid.colony_position:
             self.has_food = False
             self.path_memory = []
-            self.return_path_length = 0
+            self.pheromone_strength = 0
             print(f"Ant dropped food at step: {step_number}")
 
         # print("Ant moved to", self.pos)
@@ -69,12 +71,6 @@ class Ant:
         self.pos = chosen_pos
 
     def travel_back(self):
-        distance_from_food = len(self.path_memory)
-        if self.return_path_length > 0:
-            strength = distance_from_food / self.return_path_length
-        else:
-            strength = 0  # unlikely case: means food is at colony
-
         chosen_pos = self.path_memory.pop()
-        self.grid.add_pheromone(chosen_pos, strength=strength)
+        self.grid.add_pheromone(chosen_pos, strength=self.pheromone_strength)
         self.pos = chosen_pos

@@ -70,7 +70,7 @@ References:
 
 - I worked on the basic simulation for the project this week, done in !1. This did not have any pheromone based behaviour and was a simple random walk for 1 ant, but it sets a flexible code design for our project.
 - Then I added pheromone related behaviour in !2, and improved plots. This also has the feature to evaporate pheromones.
-- Finally, I added pheromone decay across length of the ant path and improved some outcome logging in !3.
+- Finally, I added pheromone dilution across length of the ant path and improved some outcome logging in !3.
 
 Currently, the simulation looks like this:
 ![](./journal/week2/ant_simulation.png)
