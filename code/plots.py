@@ -35,4 +35,4 @@ def plot_world(grid, ant, step_number, show_scent=True):
     plt.imshow(display_grid, interpolation="nearest")
     plt.title("Ant Colony Simulation")
     plt.axis("off")
-    plt.savefig(f"ant_colony-{step_number}.png")
+    plt.savefig(f"images/ant_colony-{step_number}.png")

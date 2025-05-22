@@ -20,4 +20,5 @@ ant = ants.Ant(environment)
 for i in range(50):
     environment.evaporate_pheromones()
     ant.next_step()
-    plots.plot_world(environment, ant, i)
+    if i % 10 == 0:
+        plots.plot_world(environment, ant, i)

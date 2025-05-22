@@ -38,6 +38,8 @@ class Ant:
             if 0 <= nx < self.grid.size and 0 <= ny < self.grid.size:
                 if (nx, ny) in self.grid.obstacle_positions:
                     continue
+                if (nx, ny) == self.path_memory[-1]:  # don't go back
+                    continue
 
                 food_val = self.grid.food_scent[nx, ny]
                 pheromone_val = self.grid.food_path[nx, ny]
