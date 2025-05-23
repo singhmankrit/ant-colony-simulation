@@ -7,11 +7,12 @@ class Ant:
         self.grid = grid
         self.pos = grid.colony_position  # assume all ants start at colony
         self.path_memory = [self.pos]
+        self.pheromone_strength = 0
 
         # ant status
         self.has_food = False
 
-    def next_step(self):
+    def next_step(self, step_number):
         if not self.has_food:
             self.explore_grid()
         else:
@@ -19,14 +20,18 @@ class Ant:
 
         if not self.has_food and self.pos in self.grid.food_positions:
             self.has_food = True
-            print("Ant picked up food")
+            path_length = len(self.path_memory)
+            if path_length > 0:
+                self.pheromone_strength = 1 / path_length
+            print(f"Ant picked up food at step: {step_number}")
 
         elif self.has_food and self.pos == self.grid.colony_position:
             self.has_food = False
             self.path_memory = []
-            print("Ant dropped food at colony")
+            self.pheromone_strength = 0
+            print(f"Ant dropped food at step: {step_number}")
 
-        print("Ant moved to", self.pos)
+        # print("Ant moved to", self.pos)
 
     def explore_grid(self):
         x, y = self.pos
@@ -36,10 +41,15 @@ class Ant:
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
             if 0 <= nx < self.grid.size and 0 <= ny < self.grid.size:
-                if (nx, ny) in self.grid.obstacle_positions:
+                if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
                     continue
-                if len(self.path_memory) > 1 and (nx, ny) == self.path_memory[-2]:
+                if (
+                    len(self.path_memory) > 1 and (nx, ny) == self.path_memory[-2]
+                ):  # don't immediately take a step back
                     continue
+                # this is for debugging: we can verify that drop time = 2*pickup time in the beginning
+                # if (nx, ny) == self.grid.colony_position: # don't come back empty handed
+                #     continue
 
                 food_val = self.grid.food_scent[nx, ny]
                 pheromone_val = self.grid.food_path[nx, ny]
@@ -62,5 +72,5 @@ class Ant:
 
     def travel_back(self):
         chosen_pos = self.path_memory.pop()
-        self.grid.add_pheromone(chosen_pos, strength=1)
+        self.grid.add_pheromone(chosen_pos, strength=self.pheromone_strength)
         self.pos = chosen_pos

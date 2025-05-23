@@ -29,29 +29,31 @@ You will find how to include [links](https://docs.gitlab.com/ee/user/markdown.ht
 
 Discussions about the project design are best done in person with the course team or via the planning issue #1. Once your project is approved, copy the project plan here.
 
-Topic: Simulating an Ant Colony and studying Emergent Behaviour
-Parameters / Observables:
+Topic: **Simulating an Ant Colony and studying Emergent Behaviour**
 
-Time taken for the first ant to reach food
-Number of ants that find the food path
-Minimum, maximum, average path lengths to food
-We can vary the number of ants to see when can they overcome difficult obstacles
+Parameters / Observables:
+- Time taken for the first ant to reach food
+- Number of ants that find the food path
+- Minimum, maximum, average path lengths to food
+- We can vary the number of ants to see when can they overcome difficult obstacles
 
 Phase 1: Our initial model will involve simulating a 2D grid with food sources and obstacles. Each ant can do a random walk in the 4 cardinal directions based on certain probability that depend on pheromone levels / "scent" of the grid. The food source will have a local "scent" so that ants near it can be attracted towards it. Once an ant discovers a food source, it will retrace it's path back to the colony and drop pheromones along the path for others to follow, and the pheromones will have an evaporation rate.
-Phase 2:
-Model enhancements:
 
-Finite food source
-"Hunger" for ants which may discourage them to go too far
-Amount of food present in the colony can be monitored and measured, based on which ants incentivised to explore far away locations
-Addition of dynamic obstacles to a known food path and how the ants overcome it
+
+Phase 2: \
+Model enhancements:
+- Finite food source
+- "Hunger" for ants which may discourage them to go too far
+- Amount of food present in the colony can be monitored and measured, based on which ants incentivised to explore far away locations
+- Addition of dynamic obstacles to a known food path and how the ants overcome it
 
 We would also like to explore the possibility of modelling each ant as a Neural Network, thereby trying to study if there is a collective intelligence in the colony.
 References:
 
-Biologically inspired ant colony simulation: [Reference Paper](https://graphics.cs.uh.edu/wp-content/papers/2018/2018-CAVW-AntSimulation.pdf)
+- Biologically inspired ant colony simulation: [Reference Paper](https://graphics.cs.uh.edu/wp-content/papers/2018/2018-CAVW-AntSimulation.pdf)
+- Ant Colony Reinforcement Learning: [Code for reference](https://github.com/jeffasante/ant-colony-rl)
 
-Ant Colony Reinforcement Learning: [Code for reference](https://github.com/jeffasante/ant-colony-rl)
+
 ## Week 2
 (due 27 May 2025, 11:00)
 
@@ -63,6 +65,17 @@ Ant Colony Reinforcement Learning: [Code for reference](https://github.com/jeffa
 @rjuyal will work on making the animation and making things configurable
 
 ### Progress Report 
+
+@mankritsingh
+
+- I worked on the basic simulation for the project this week, done in !1. This did not have any pheromone based behaviour and was a simple random walk for 1 ant, but it sets a flexible code design for our project.
+- Then I added pheromone related behaviour in !2, and improved plots. This also has the feature to evaporate pheromones.
+- Finally, I added pheromone dilution across length of the ant path and improved some outcome logging in !3.
+
+Currently, the simulation looks like this:
+![](./journal/week2/ant_simulation.png)
+
+Here, the red is the natural food scent (remains static) and blue shades are the ant pheromones. Grey boxes are the obstacles.
 
 ## Week 3
 (due 3 June 2025, 11:00)
