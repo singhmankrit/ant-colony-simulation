@@ -21,8 +21,13 @@ def draw_world(ax, grid, ants, step_number, show_scent=True):
             origin="upper",
             extent=(0, size, 0, size),
         )
-    # ax.imshow(grid.food_path, cmap="Blues", alpha=0.4,
-    #           origin="upper", extent=(0, size, 0, size))
+    ax.imshow(
+        np.average(grid.food_path[::-1, :], axis=-1),
+        cmap="Blues",
+        alpha=0.4,
+        origin="upper",
+        extent=(0, size, 0, size),
+    )
     x, y = np.meshgrid(np.arange(size), np.arange(size))
     ax.quiver(x + 0.5, y + 0.5, grid.food_path[:, :, 1], 0, scale=2)
     ax.quiver(x + 0.5, y + 0.5, -grid.food_path[:, :, 3], 0, scale=2)
