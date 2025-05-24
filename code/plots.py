@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def draw_world(ax, grid, ants, step_number, show_scent=True):
+def draw_world(ax, grid, ants, step_number):
     ax.clear()
     size = grid.size
     ax.set_xlim(0, size)
@@ -14,9 +14,6 @@ def draw_world(ax, grid, ants, step_number, show_scent=True):
     ax.set_aspect("equal")
     ax.set_title(f"Ant Simulation - Step {step_number}")
 
-    if show_scent:
-        ax.imshow(grid.food_scent, cmap="Greens", alpha=0.2,
-                  origin="upper", extent=(0, size, 0, size))
     ax.imshow(grid.food_path, cmap="Blues", alpha=0.4,
               origin="upper", extent=(0, size, 0, size))
 
