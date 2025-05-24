@@ -3,10 +3,10 @@ import matplotlib.patches as patches
 import numpy as np
 
 
-def plot_world(grid, ants, step_number, show_scent=True):
+
+def draw_world(ax, grid, ants, step_number, show_scent=True):
+    ax.clear()
     size = grid.size
-    fig, ax = plt.subplots(figsize=(6, 6))
-    fig.patch.set_facecolor("white")
     ax.set_xlim(0, size)
     ax.set_ylim(0, size)
     ax.set_xticks([])
@@ -14,75 +14,43 @@ def plot_world(grid, ants, step_number, show_scent=True):
     ax.set_aspect("equal")
     ax.set_title(f"Ant Simulation - Step {step_number}")
 
-    # Heatmaps (with extent to match grid)
     if show_scent:
-        ax.imshow(
-            grid.food_scent,
-            cmap="Reds",
-            alpha=0.2,
-            origin="upper",
-            extent=(0, size, 0, size),
-        )
-    ax.imshow(
-        grid.food_path,
-        cmap="Blues",
-        alpha=0.4,
-        origin="upper",
-        extent=(0, size, 0, size),
-    )
+        ax.imshow(grid.food_scent, cmap="Greens", alpha=0.2,
+                  origin="upper", extent=(0, size, 0, size))
+    ax.imshow(grid.food_path, cmap="Blues", alpha=0.4,
+              origin="upper", extent=(0, size, 0, size))
 
-    # Obstacles
     for x, y in grid.obstacle_positions:
         rect = patches.Rectangle(
-            (y, size - x - 1),
-            1,
-            1,
-            linewidth=1,
-            edgecolor="black",
-            facecolor="gray",
-            zorder=1,
-        )
+            (y, size - x - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="black", zorder=1)
         ax.add_patch(rect)
 
-    # Food using 🍎 emoji
-    emoji_size = max(6, int(300 / size))
     for x, y in grid.food_positions:
-        ax.text(
-            y + 0.5,
-            size - x - 0.5,
-            "🍎",
-            fontsize=emoji_size,
-            ha="center",
-            va="center",
-            fontname="Segoe UI Emoji",
-            zorder=5,
-        )
+        rect = patches.Rectangle(
+            (y, size - x - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="green", zorder=5)
+        ax.add_patch(rect)
+        ax.text(y + 0.5, size - x - 0.5, "Food", fontsize=8, ha="center",
+                va="center", weight="bold", color="white", zorder=6)
 
-    # Colony using 🏠 emoji
-    cx, cy = grid.colony_position
-    ax.text(
-        cy + 0.5,
-        size - cx - 0.5,
-        "🏠",
-        fontsize=emoji_size,
-        ha="center",
-        va="center",
-        fontname="Segoe UI Emoji",
-        zorder=5,
-    )
+    if grid.colony_position is not None:
+        cx, cy = grid.colony_position
+        rect = patches.Rectangle(
+            (cy, size - cx - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="orange", zorder=5)
+        ax.add_patch(rect)
+        ax.text(cy + 0.5, size - cx - 0.5, "Home", fontsize=8, ha="center",
+                va="center", weight="bold", color="white", zorder=6)
 
+    # Red dots for ants with jitter for overlaps
+    pos_dict = {}
     for ant in ants:
-        # Ant using 🐜 emoji
-        ax.text(
-            ant.pos[1] + 0.5,
-            size - ant.pos[0] - 0.5,
-            "🐜",
-            fontsize=emoji_size,
-            ha="center",
-            va="center",
-            fontname="Segoe UI Emoji",
-            zorder=10,
-        )
+        pos = ant.pos
+        if pos not in pos_dict:
+            pos_dict[pos] = []
+        pos_dict[pos].append(ant)
 
-    plt.savefig(f"images/ant_colony-{step_number:03}.png")
-    plt.close()
+    for (x, y), ant_group in pos_dict.items():
+        for idx, ant in enumerate(ant_group):
+            jitter_x = (idx % 3 - 1) * 0.1
+            jitter_y = (idx // 3 - 1) * 0.1
+            ax.plot(y + 0.5 + jitter_x, size - x - 0.5 +
+                    jitter_y, "ro", markersize=5, zorder=10)
