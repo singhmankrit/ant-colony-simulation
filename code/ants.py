@@ -25,11 +25,12 @@ class Ant:
                 self.pheromone_strength = 1 / path_length
             print(f"Ant picked up food at step: {step_number}")
 
-        elif self.has_food and self.pos == self.grid.colony_position:
-            self.has_food = False
+        elif self.pos == self.grid.colony_position:
+            if self.has_food:
+                self.has_food = False
+                print(f"Ant dropped food at step: {step_number}")
             self.path_memory = []
             self.pheromone_strength = 0
-            print(f"Ant dropped food at step: {step_number}")
 
         # print("Ant moved to", self.pos)
 
