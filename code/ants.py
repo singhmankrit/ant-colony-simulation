@@ -25,20 +25,26 @@ class Ant:
                 self.pheromone_strength = 1 / path_length
             print(f"Ant picked up food at step: {step_number}")
 
-        elif self.has_food and self.pos == self.grid.colony_position:
-            self.has_food = False
+        elif self.pos == self.grid.colony_position:
+            if self.has_food:
+                self.has_food = False
+                print(f"Ant dropped food at step: {step_number}")
             self.path_memory = []
             self.pheromone_strength = 0
-            print(f"Ant dropped food at step: {step_number}")
 
         # print("Ant moved to", self.pos)
 
     def explore_grid(self):
         x, y = self.pos
-        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        directions = [
+            (0, 1, 0),
+            (1, 0, 1),
+            (0, -1, 2),
+            (-1, 0, 3),
+        ]
         candidates = []  # directions ant can step in and their step score
 
-        for dx, dy in directions:
+        for dx, dy, dir in directions:
             nx, ny = x + dx, y + dy
             if 0 <= nx < self.grid.size and 0 <= ny < self.grid.size:
                 if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
@@ -51,7 +57,7 @@ class Ant:
                 # if (nx, ny) == self.grid.colony_position: # don't come back empty handed
                 #     continue
 
-                pheromone_val = self.grid.food_path[ny, nx]
+                pheromone_val = self.grid.food_path[y, x, dir]
 
                 score = 0.1 + pheromone_val  # step score
                 candidates.append(((nx, ny), score))
@@ -71,5 +77,22 @@ class Ant:
 
     def travel_back(self):
         chosen_pos = self.path_memory.pop()
-        self.grid.add_pheromone(chosen_pos, strength=self.pheromone_strength)
+        self.grid.add_pheromone(
+            chosen_pos, calc_dir(chosen_pos, self.pos), strength=self.pheromone_strength
+        )
         self.pos = chosen_pos
+
+
+def calc_dir(old, new):
+    ox, oy = old
+    nx, ny = new
+    if ny - oy == 1:
+        return 0
+    elif nx - ox == 1:
+        return 1
+    elif ny - oy == -1:
+        return 2
+    elif nx - ox == -1:
+        return 3
+    else:
+        raise ValueError("not a single step")
