@@ -9,7 +9,6 @@ import matplotlib.animation as animation
 environment = grid.Grid(9)
 environment.place_colony((0, 0))
 environment.add_food((6, 6))
-environment.set_food_scent()
 
 environment.add_obstacle((4, 2))
 environment.add_obstacle((4, 3))
