@@ -31,4 +31,4 @@ def update(frame):
 
 
 ani = animation.FuncAnimation(fig, update, frames=300, interval=200)
-ani.save("images/ant_simulation.gif", writer="pillow")
+ani.save("images/ant_simulation.mp4", writer="ffmpeg")
