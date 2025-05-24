@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import code.grid as grid
 import code.ants as ants
 import code.plots as plots
