@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import code.grid as grid
 import code.ants as ants
 import code.plots as plots
@@ -31,4 +32,7 @@ def update(frame):
 
 
 ani = animation.FuncAnimation(fig, update, frames=300, interval=200)
+
+if not os.path.isdir("images"):
+    os.mkdir("images")
 ani.save("images/ant_simulation.mp4", writer="ffmpeg")
