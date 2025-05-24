@@ -44,20 +44,20 @@ class Grid:
         the grid bounds.
         """
         for fx, fy in self.food_positions:
-            self.food_scent[fx, fy] = max(self.food_scent[fx, fy], 1)
+            self.food_scent[fy, fx] = max(self.food_scent[fy, fx], 1)
             for dx in range(-2, 3):
                 for dy in range(-2, 3):
                     nx, ny = fx + dx, fy + dy
                     if 0 <= nx < self.size and 0 <= ny < self.size:
                         distance = max(abs(dx), abs(dy))
                         if distance == 1:
-                            self.food_scent[nx, ny] = max(self.food_scent[nx, ny], 0.5)
+                            self.food_scent[ny, nx] = max(self.food_scent[ny, nx], 0.5)
                         elif distance == 2:
-                            self.food_scent[nx, ny] = max(self.food_scent[nx, ny], 0.25)
+                            self.food_scent[ny, nx] = max(self.food_scent[ny, nx], 0.25)
 
     def evaporate_pheromones(self, decay_rate=0.01):
         self.food_path *= 1 - decay_rate
 
     def add_pheromone(self, position, strength=1.0):
         x, y = position
-        self.food_path[x, y] += strength
+        self.food_path[y, x] += strength

@@ -51,8 +51,8 @@ class Ant:
                 # if (nx, ny) == self.grid.colony_position: # don't come back empty handed
                 #     continue
 
-                food_val = self.grid.food_scent[nx, ny]
-                pheromone_val = self.grid.food_path[nx, ny]
+                food_val = self.grid.food_scent[ny, nx]
+                pheromone_val = self.grid.food_path[ny, nx]
 
                 score = 0.1 + food_val + pheromone_val  # step score
                 candidates.append(((nx, ny), score))
