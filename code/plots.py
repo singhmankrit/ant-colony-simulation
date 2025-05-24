@@ -3,7 +3,6 @@ import matplotlib.patches as patches
 import numpy as np
 
 
-
 def draw_world(ax, grid, ants, step_number, show_scent=True):
     ax.clear()
     size = grid.size
@@ -15,30 +14,84 @@ def draw_world(ax, grid, ants, step_number, show_scent=True):
     ax.set_title(f"Ant Simulation - Step {step_number}")
 
     if show_scent:
-        ax.imshow(grid.food_scent, cmap="Greens", alpha=0.2,
-                  origin="upper", extent=(0, size, 0, size))
-    ax.imshow(grid.food_path, cmap="Blues", alpha=0.4,
-              origin="upper", extent=(0, size, 0, size))
+        ax.imshow(
+            grid.food_scent[::-1, :],
+            cmap="Greens",
+            alpha=0.2,
+            origin="upper",
+            extent=(0, size, 0, size),
+        )
+    ax.imshow(
+        np.average(grid.food_path[::-1, :], axis=-1),
+        cmap="Blues",
+        alpha=0.4,
+        origin="upper",
+        extent=(0, size, 0, size),
+    )
+    x, y = np.meshgrid(np.arange(size), np.arange(size))
+    ax.quiver(x + 0.5, y + 0.5, grid.food_path[:, :, 1], 0, scale=2)
+    ax.quiver(x + 0.5, y + 0.5, -grid.food_path[:, :, 3], 0, scale=2)
+    ax.quiver(x + 0.5, y + 0.5, 0, grid.food_path[:, :, 0], scale=2)
+    ax.quiver(x + 0.5, y + 0.5, 0, -grid.food_path[:, :, 2], scale=2)
 
     for x, y in grid.obstacle_positions:
         rect = patches.Rectangle(
-            (x, size - y - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="black", zorder=1)
+            (x, y),
+            1,
+            1,
+            linewidth=1,
+            edgecolor="black",
+            facecolor="black",
+            zorder=1,
+        )
         ax.add_patch(rect)
 
     for x, y in grid.food_positions:
         rect = patches.Rectangle(
-            (x, size - y - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="green", zorder=5)
+            (x, y),
+            1,
+            1,
+            linewidth=1,
+            edgecolor="black",
+            facecolor="green",
+            zorder=5,
+        )
         ax.add_patch(rect)
-        ax.text(x + 0.5, size - y - 0.5, "Food", fontsize=8, ha="center",
-                va="center", weight="bold", color="white", zorder=6)
+        ax.text(
+            x + 0.5,
+            y + 0.5,
+            "Food",
+            fontsize=8,
+            ha="center",
+            va="center",
+            weight="bold",
+            color="white",
+            zorder=6,
+        )
 
     if grid.colony_position is not None:
         cx, cy = grid.colony_position
         rect = patches.Rectangle(
-            (cx, size - cy - 1), 1, 1, linewidth=1, edgecolor="black", facecolor="orange", zorder=5)
+            (cx, cy),
+            1,
+            1,
+            linewidth=1,
+            edgecolor="black",
+            facecolor="orange",
+            zorder=5,
+        )
         ax.add_patch(rect)
-        ax.text(cx + 0.5, size - cy - 0.5, "Home", fontsize=8, ha="center",
-                va="center", weight="bold", color="white", zorder=6)
+        ax.text(
+            cx + 0.5,
+            cy + 0.5,
+            "Home",
+            fontsize=8,
+            ha="center",
+            va="center",
+            weight="bold",
+            color="white",
+            zorder=6,
+        )
 
     # Red dots for ants with jitter for overlaps
     pos_dict = {}
@@ -52,5 +105,10 @@ def draw_world(ax, grid, ants, step_number, show_scent=True):
         for idx, ant in enumerate(ant_group):
             jitter_x = (idx % 3 - 1) * 0.1
             jitter_y = (idx // 3 - 1) * 0.1
-            ax.plot(x + 0.5 + jitter_x, size - y - 0.5 +
-                    jitter_y, "ro", markersize=5, zorder=10)
+            ax.plot(
+                x + 0.5 + jitter_x,
+                y + 0.5 + jitter_y,
+                "ro",
+                markersize=5,
+                zorder=10,
+            )

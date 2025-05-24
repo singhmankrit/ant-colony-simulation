@@ -14,7 +14,7 @@ class Grid:
         self.size = size
         self.grid = np.zeros((size, size), dtype=int)
         self.food_scent = np.zeros((size, size), dtype=float)  # natural scent
-        self.food_path = np.zeros((size, size), dtype=float)  # pheromones
+        self.food_path = np.zeros((size, size, 4), dtype=float)  # pheromones
 
         self.colony_position = None
         self.food_positions = []
@@ -58,6 +58,6 @@ class Grid:
     def evaporate_pheromones(self, decay_rate=0.01):
         self.food_path *= 1 - decay_rate
 
-    def add_pheromone(self, position, strength=1.0):
+    def add_pheromone(self, position, direction, strength=1.0):
         x, y = position
-        self.food_path[y, x] += strength
+        self.food_path[y, x, direction] += strength
