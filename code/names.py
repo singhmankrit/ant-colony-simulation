@@ -2,6 +2,7 @@ import random
 
 first_names = [
     "Andy",
+    "Anthony",
     "Bella",
     "Charlie",
     "Daisy",
