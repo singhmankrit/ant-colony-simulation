@@ -17,6 +17,7 @@ class Grid:
         self.colony_position = None
         self.food_positions = []
         self.obstacle_positions = []
+        self.pheromone_decay = 0.01
 
     def place_colony(self, position):
         self.colony_position = position
@@ -31,7 +32,7 @@ class Grid:
         self.grid[position] = CellType.OBSTACLE.value
 
     def evaporate_pheromones(self, decay_rate=0.01):
-        self.food_path *= 1 - decay_rate
+        self.food_path *= 1 - self.pheromone_decay
 
     def add_pheromone(self, position, direction, strength=1.0):
         x, y = position

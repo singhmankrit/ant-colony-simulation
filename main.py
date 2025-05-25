@@ -27,7 +27,6 @@ for obstacle in data["obstacles"]:
     environment.add_obstacle(tuple(obstacle))
 
 # Set simulation parameters
-environment.pheromone_strength = config["pheromone_strength"]
 environment.pheromone_decay = config["pheromone_decay"]
 seed = config["seed"]
 

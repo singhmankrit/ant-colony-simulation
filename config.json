@@ -1,7 +1,6 @@
 {
   "environment_path": "environment.json",
   "num_ants": 10,
-  "pheromone_strength": 1.0,
   "pheromone_decay": 0.01,
   "seed": 42,
   "frames": 1000,

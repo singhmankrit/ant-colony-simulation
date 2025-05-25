@@ -8,7 +8,6 @@ def parse_config(path: str) -> dict[str, Any]:
     return {
         "environment_path": config.get("environment_path", "environment.json"),
         "num_ants": config.get("num_ants", 10),
-        "pheromone_strength": config.get("pheromone_strength", 1.0),
         "pheromone_decay": config.get("pheromone_decay", 0.05),
         "seed": config.get("seed", 42),
         "frames": config.get("frames", 300),
