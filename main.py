@@ -41,10 +41,13 @@ ant_list = [ants.Ant(environment) for _ in range(config["num_ants"])]
 
 def update(frame):
     ax.clear()
-    environment.evaporate_pheromones()
-    for ant in ant_list:
-        ant.next_step(frame)
-    plots.draw_world(ax, environment, ant_list, frame)
+    if frame == 0:
+        plots.draw_world(ax, environment, ant_list, step_number=0)
+    else:
+        environment.evaporate_pheromones()
+        for ant in ant_list:
+            ant.next_step(frame)
+        plots.draw_world(ax, environment, ant_list, frame)
 
 
 # Animate
