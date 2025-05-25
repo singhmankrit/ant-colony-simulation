@@ -50,7 +50,7 @@ class Ant:
                 if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
                     continue
                 if (
-                    len(self.path_memory) > 1 and (
+                    len(self.path_memory) >= 1 and (
                         nx, ny) == self.path_memory[-1]
                 ):  # don't immediately take a step back
                     continue
