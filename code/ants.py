@@ -1,11 +1,16 @@
 import numpy as np
 import random
+from . import names
 
 
 class Ant:
-    def __init__(self, grid):
+    def __init__(self, grid, name=None):
+        if name is None:
+            name = names.gen_name()
+        self.name = name
         self.grid = grid
-        self.pos = grid.colony_position  # assume all ants start at colony
+        # assume all ants start at colony
+        self.pos = grid.colony_position
         self.path_memory = [self.pos]
         self.pheromone_strength = 0
 
@@ -23,12 +28,14 @@ class Ant:
             path_length = len(self.path_memory)
             if path_length > 0:
                 self.pheromone_strength = 1 / path_length
-            print(f"Ant picked up food at step: {step_number}")
+            print(
+                f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
             if self.has_food:
                 self.has_food = False
-                print(f"Ant dropped food at step: {step_number}")
+                print(
+                    f"\033[94m{self.name}\033[0m dropped food at step: {step_number}")
             self.path_memory = []
             self.pheromone_strength = 0
 
