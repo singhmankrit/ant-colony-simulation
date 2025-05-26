@@ -87,6 +87,18 @@ Here, the red is the natural food scent (remains static) and blue shades are the
 - We are still planning on adding observables which will help compare how the ants are
   working together and the most recent food-path lengths per ant.
 
+@rjuyal
+
+This week I worked on making the animation, making parameters configurable, making the setup function to easily modify the layout of the world, and reviewed merge requests.
+
+Animation:
+
+![](./journal/week2/ant_simulation.mp4)
+
+Setup world GUI: 
+
+![](./journal/week2/environment_image.png)
+
 ## Week 3
 (due 3 June 2025, 11:00)
 
