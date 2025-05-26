@@ -35,3 +35,4 @@ The configuration file uses the json format. The options are listed below with t
 | frames | `1000` | The amount of timesteps to simulate |
 | frame_interval | `200` | The delay between frames(in milliseconds) in the animation |
 | video_output | `images/ant_simulation.mp4` | The path to store animation |
+| exploration_desire | `0.01` | The base weight of the ants to just go randomly |
