@@ -2,6 +2,7 @@
   "environment_path": "environment.json",
   "num_ants": 10,
   "pheromone_decay": 0.01,
+  "seed": 42,
   "frames": 10000,
   "frame_interval": 200,
   "video_output": "images/ant_simulation.mp4",
