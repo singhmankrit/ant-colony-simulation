@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import grid as grid
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -12,7 +13,7 @@ fig, ax = None, None
 cell_artists = {}
 colony_set = False
 
-buttons = []            # store button references
+buttons = []  # store button references
 selected_button = None  # currently selected button
 
 
@@ -26,7 +27,7 @@ def draw_grid():
     ax.grid(True)
     ax.set_aspect("equal")
     fig.canvas.mpl_connect("button_press_event", on_click)
-    fig.canvas.mpl_connect('motion_notify_event', on_drag)
+    fig.canvas.mpl_connect("motion_notify_event", on_drag)
     cell_artists = {}
     plt.subplots_adjust(bottom=0.25)
 
@@ -46,18 +47,20 @@ def update_display(x, y):
 
     # Map grid coordinates to matplotlib rectangle coords (remember y inverted)
     rect = patches.Rectangle(
-        (x, y), 1, 1,
-        facecolor='white',  # Use white as default background color, not empty string
-        edgecolor='black',
+        (x, y),
+        1,
+        1,
+        facecolor="white",  # Use white as default background color, not empty string
+        edgecolor="black",
         linewidth=1,
-        zorder=4
+        zorder=4,
     )
     if val == 1:
-        rect.set_facecolor('red')
+        rect.set_facecolor("red")
     elif val == 2:
-        rect.set_facecolor('green')
+        rect.set_facecolor("green")
     elif val == 3:
-        rect.set_facecolor('black')
+        rect.set_facecolor("black")
 
     ax.add_patch(rect)
     cell_artists[key] = rect
@@ -164,11 +167,11 @@ def set_mode(label, btn):
 
     # Reset all buttons color
     for b in buttons:
-        b.ax.set_facecolor('lightgray')
+        b.ax.set_facecolor("lightgray")
         b.ax.figure.canvas.draw_idle()
 
     # Highlight selected button
-    btn.ax.set_facecolor('lightblue')
+    btn.ax.set_facecolor("lightblue")
     btn.ax.figure.canvas.draw_idle()
 
     selected_button = btn
@@ -182,7 +185,7 @@ def done(event):
             "size": env.size,
             "colony": env.colony_position,
             "food": list(env.food_positions),
-            "obstacles": list(env.obstacle_positions)
+            "obstacles": list(env.obstacle_positions),
         }
         with open("environment.json", "w") as f:
             json.dump(data, f, indent=2)
@@ -198,26 +201,22 @@ def done(event):
 
 def create_buttons():
     global buttons
-    modes = [("Colony", "colony"), ("Food", "food"),
-             ("Obstacle", "obstacle")]
+    modes = [("Colony", "colony"), ("Food", "food"), ("Obstacle", "obstacle")]
     button_width = 0.12
     spacing = 0.01
     start_x = 0.05
 
-    color_map = {
-        "colony": "red",
-        "food": "green",
-        "obstacle": "black"
-    }
+    color_map = {"colony": "red", "food": "green", "obstacle": "black"}
 
     buttons.clear()
 
     for i, (label, name) in enumerate(modes):
         ax_btn = plt.axes(
-            [start_x + i * (button_width + spacing), 0.05, button_width, 0.06])
+            [start_x + i * (button_width + spacing), 0.05, button_width, 0.06]
+        )
         btn = Button(ax_btn, label)
         buttons.append(btn)
-        btn.label.set_fontweight('bold')
+        btn.label.set_fontweight("bold")
         btn.label.set_color(color_map[name])
         btn.on_clicked(lambda event, n=name, b=btn: set_mode(n, b))
 
@@ -225,23 +224,25 @@ def create_buttons():
 
     # Done button
     ax_done = plt.axes(
-        [start_x + len(modes) * (button_width + spacing), 0.05, 0.12, 0.06])
+        [start_x + len(modes) * (button_width + spacing), 0.05, 0.12, 0.06]
+    )
     btn_done = Button(ax_done, "Done")
     btn_done.on_clicked(done)
     buttons.append(btn_done)  # <-- Add this line!
 
-    ax_erase = plt.axes([start_x + (len(modes) + 1) *
-                        (button_width + spacing), 0.05, 0.12, 0.06])
+    ax_erase = plt.axes(
+        [start_x + (len(modes) + 1) * (button_width + spacing), 0.05, 0.12, 0.06]
+    )
     btn_erase = Button(ax_erase, "Erase All")
     btn_erase.on_clicked(erase_all)
     buttons.append(btn_erase)
 
     # Add text box for erase instruction
-    ax_txt = plt.axes([start_x + (len(modes) + 2) *
-                      (button_width + spacing) + 0.01, 0.05, 0.20, 0.06])
-    ax_txt.axis('off')
-    ax_txt.text(0, 0.5, 'Right-click to erase',
-                fontsize=10, verticalalignment='center')
+    ax_txt = plt.axes(
+        [start_x + (len(modes) + 2) * (button_width + spacing) + 0.01, 0.05, 0.20, 0.06]
+    )
+    ax_txt.axis("off")
+    ax_txt.text(0, 0.5, "Right-click to erase", fontsize=10, verticalalignment="center")
 
 
 def setup_env():

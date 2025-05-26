@@ -19,6 +19,9 @@ class Grid:
         self.obstacle_positions = []
         self.pheromone_decay = 0.01
 
+        self.food_gathered_instances = []
+        self.food_at_nest_instances = []
+
     def place_colony(self, position):
         self.colony_position = position
         self.grid[position] = CellType.COLONY.value

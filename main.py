@@ -35,7 +35,10 @@ random.seed(seed)
 np.random.seed(seed)
 
 fig, ax = plt.subplots()
-ant_list = [ants.Ant(environment) for _ in range(config["num_ants"])]
+ant_list = [
+    ants.Ant(environment, exploration_desire=config["exploration_desire"])
+    for _ in range(config["num_ants"])
+]
 
 
 def update(frame):
@@ -51,9 +54,12 @@ def update(frame):
 
 # Animate
 ani = animation.FuncAnimation(
-    fig, update, frames=config["frames"], interval=config["frame_interval"])
+    fig, update, frames=config["frames"], interval=config["frame_interval"]
+)
 
 # Save video
 output_path = config["video_output"]
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 ani.save(output_path, writer="ffmpeg")
+
+plots.hist_distances(environment, steps=config["frames"])
