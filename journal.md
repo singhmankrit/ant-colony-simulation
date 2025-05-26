@@ -77,6 +77,16 @@ Currently, the simulation looks like this:
 
 Here, the red is the natural food scent (remains static) and blue shades are the ant pheromones. Grey boxes are the obstacles.
 
+@npaarts
+
+- I made the basic simulation use pheromones on the edges in between the nodes as the papers I've found on ACO said it should be done.
+- I added an observable for how much food is gathered in total up to each timestep
+  ![](./journal/week2/total_food.png)
+- I also added an observable of the average food gathered per timestep (by 10 ants combined)
+  ![](./journal/week2/average_food.png)
+- We are still planning on adding observables which will help compare how the ants are
+  working together and the most recent food-path lengths per ant.
+
 ## Week 3
 (due 3 June 2025, 11:00)
 
