@@ -3,3 +3,5 @@ __pycache__
 images/*
 venv/*
 .direnv/
+environment.png
+environment.json
