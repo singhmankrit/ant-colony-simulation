@@ -6,11 +6,11 @@ from . import names
 class Ant:
     def __init__(self, grid, name=None):
         if name is None:
-            self.name = names.gen_name()
-        else:
-            self.name = name
+            name = names.gen_name()
+        self.name = name
         self.grid = grid
-        self.pos = grid.colony_position  # assume all ants start at colony
+        # assume all ants start at colony
+        self.pos = grid.colony_position
         self.path_memory = [self.pos]
         self.pheromone_strength = 0
 
@@ -28,14 +28,17 @@ class Ant:
             path_length = len(self.path_memory)
             if path_length > 0:
                 self.pheromone_strength = 1 / path_length
-            print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
+            print(
+                f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
             if self.has_food:
                 self.has_food = False
-                print(f"\033[94m{self.name}\033[0m dropped food at step: {step_number}")
+                print(
+                    f"\033[94m{self.name}\033[0m dropped food at step: {step_number}")
             self.path_memory = []
-            self.pheromone_strength = 0\
+            self.pheromone_strength = 0
+
         # print("Ant moved to", self.pos)
 
     def explore_grid(self):
@@ -54,7 +57,8 @@ class Ant:
                 if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
                     continue
                 if (
-                    len(self.path_memory) > 1 and (nx, ny) == self.path_memory[-2]
+                    len(self.path_memory) >= 1 and (
+                        nx, ny) == self.path_memory[-1]
                 ):  # don't immediately take a step back
                     continue
                 # this is for debugging: we can verify that drop time = 2*pickup time in the beginning
@@ -67,13 +71,17 @@ class Ant:
                 candidates.append(((nx, ny), score))
 
         if not candidates:
-            print("Ant has no legal move")
-            return
+            nx, ny = self.path_memory[-1]
+            pheromone_val = self.grid.food_path[y, x, calc_dir(
+                self.pos, self.path_memory[-1])]
+            score = 0.1 + pheromone_val
+            candidates.append(((nx, ny), score))
 
         # Weighted random selection
         total = sum(score for _, score in candidates)
         probs = [score / total for _, score in candidates]
-        chosen_pos = random.choices([pos for pos, _ in candidates], weights=probs)[0]
+        chosen_pos = random.choices(
+            [pos for pos, _ in candidates], weights=probs)[0]
 
         # Update path and position
         self.path_memory.append(self.pos)
