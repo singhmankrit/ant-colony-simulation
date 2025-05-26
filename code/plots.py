@@ -133,6 +133,10 @@ def hist_distances(grid, steps):
         cum_back,
         label="food brought to the colony",
     )
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("gathered food")
+    plt.title("Total food gathered")
     fig.savefig("images/total_gathered_food.png")
 
     fig = plt.figure()
@@ -146,4 +150,8 @@ def hist_distances(grid, steps):
         cum_back[1:] / stps[1:],
         label="food brought to the colony/step",
     )
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("gathered food / step")
+    plt.title("Average food gathered per step")
     fig.savefig("images/average_gathered_food.png")
