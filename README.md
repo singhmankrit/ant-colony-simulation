@@ -21,3 +21,17 @@ May 21 (i.e. latest two weeks before the presentation).
 If you have problems to come up with a good project, we can provide you with
 proven project ideas. But we first want you to try coming up with your own project!
 Having designed your own project will also give a small bonus for the grade.
+
+## Config file layout
+
+The configuration file uses the json format. The options are listed below with their default value and meaning. Please note that setup.py needs to be run first to create the environment json file
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| environment_path | `environment.json` | The path to grid layout with locations of food, colony and obstacles created by setup.py |
+| num_ants | `10` | The total number of ants |
+| pheromone_decay | `0.01` | The pheromone decay rate |
+| seed | `42` | The seed to use for replication of results |
+| frames | `1000` | The amount of timesteps to simulate |
+| frame_interval | `200` | The delay between frames(in milliseconds) in the animation |
+| video_output | `images/ant_simulation.mp4` | The path to store animation |
