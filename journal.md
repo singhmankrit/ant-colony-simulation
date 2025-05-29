@@ -60,7 +60,7 @@ References:
 ### Planning
 @mankritsingh will be creating the initial world, setting up the colony, food source, obstacles and how the ants will move(including pheromones) 
 
-@npaarts will work on computing obeservables for the simulation
+@npaarts will work on computing observables for the simulation
 
 @rjuyal will work on making the animation and making things configurable
 
@@ -76,6 +76,8 @@ Currently, the simulation looks like this:
 ![](./journal/week2/ant_simulation.png)
 
 Here, the red is the natural food scent (remains static) and blue shades are the ant pheromones. Grey boxes are the obstacles.
+
+[**Update**: we removed food scent because it did not give good results.]
 
 @npaarts
 
@@ -101,6 +103,13 @@ Setup world GUI:
 
 ## Week 3
 (due 3 June 2025, 11:00)
+
+### Planning
+@mankritsingh will do literature review on observables and add code to compare them with existing papers, along with error estimation. Also, he will add a feature to allow different ants to have different pheromone preference in the random walk (so some are explorers, others are followers)
+
+@npaarts will work on making food finite / replenishable, add births / deaths and track ant population. Also, implement hunger so that ants don't wander too much without food.
+
+@rjuyal will work on adding extensions to the simulation / explore Reinforcement Learning based ants / Machine Learning approaches.
 
 
 ## Reminder final deadline
