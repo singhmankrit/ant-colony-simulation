@@ -19,14 +19,14 @@ environment_path = config["environment_path"]
 with open(environment_path, "r") as f:
     data = json.load(f)
 
-size = data["size"]
+grid_size = data["size"]
 start_food_amount = config["colony_start_amount"]
 extension = config["extension"]
 elitist_ant_count = config["elitist_ant_count"]
 pheromone_constant = config["pheromone_constant"]
 
 environment = grid.Grid(
-    size=size,
+    size=grid_size,
     extension=extension,
     start_food_amount=start_food_amount,
     elitist_ant_count=elitist_ant_count,
@@ -61,32 +61,35 @@ ant_list = [
 
 food_amounts = []
 ants_efficiency = []
+total_energy_consumed = 0
 
 
 def update(frame):
+    global total_energy_consumed
     ax.clear()
     food_amounts.append(environment.colony_food)
+
     if frame == 0:
         plots.draw_world(ax, environment, ant_list, step_number=0)
     else:
         environment.evaporate_pheromones()
         for ant in ant_list:
             ant.next_step(frame)
+            if not ant.dead:
+                total_energy_consumed += 1
+
         if extension == "elitist":
             environment.reinforce_best_path()
+
         plots.draw_world(ax, environment, ant_list, frame)
 
     if "total_ants_efficiency" in config["observables"]:
         total_collected = (
             len(environment.food_at_nest_instances) * config["ant_carry_amount"]
         )
-        total_eaten = frame * len(
-            ant_list
-        )  # as every ant eats 1 energy per step TODO: fix dead ants
-        total_energy_in_ants = sum(ant.energy for ant in ant_list)
 
-        efficiency = (total_collected - total_eaten) / (
-            total_energy_in_ants + total_collected
+        efficiency = (total_collected - total_energy_consumed) / (
+            total_energy_consumed + total_collected + 1e-3
         )
         ants_efficiency.append(round(efficiency, 2))
 
