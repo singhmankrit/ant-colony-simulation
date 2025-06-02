@@ -34,6 +34,7 @@ class Ant:
 
         self.success_trip = 0
         self.completed_trip = 0
+        self.last_food_trip_length = 0
 
         # extensions
         self.mode = mode
@@ -76,6 +77,7 @@ class Ant:
                     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
                 )
                 self.success_trip += 1
+                self.last_food_trip_length = len(self.food_path)
             self.energy += self.grid.try_get_food(self.max_energy - self.energy)
             if self.energy == 0:
                 print(

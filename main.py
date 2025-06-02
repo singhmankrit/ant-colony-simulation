@@ -63,6 +63,7 @@ food_amounts = []
 ants_efficiency = []
 success_trip_rate = []
 total_energy_consumed = 0
+avg_food_trip_length = []
 
 
 def update(frame):
@@ -72,6 +73,8 @@ def update(frame):
 
     total_successful_trips = 0
     total_completed_trips = 0
+    sum_latest_food_trip_length = 0
+
     if frame == 0:
         plots.draw_world(ax, environment, ant_list, step_number=0)
     else:
@@ -82,6 +85,9 @@ def update(frame):
                 total_energy_consumed += 1
             total_successful_trips += ant.success_trip
             total_completed_trips += ant.completed_trip
+            sum_latest_food_trip_length += ant.last_food_trip_length
+
+        avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
 
         if extension == "elitist":
             environment.reinforce_best_path()
@@ -132,3 +138,6 @@ if "shortest_path_length" in config["observables"]:
 
 if "ant_trip_success_rate" in config["observables"]:
     plots.ant_trip_success_rate(success_trip_rate)
+
+if "average_steps_per_ant" in config["observables"]:
+    plots.average_steps_per_ant(avg_food_trip_length)

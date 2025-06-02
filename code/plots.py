@@ -231,3 +231,18 @@ def ant_trip_success_rate(success_trip_rate):
     plt.ylabel("Successful Trips / Total Completed Trips")
     plt.title("Rate of Successful Trips Over Time")
     fig.savefig("images/success_trips.png")
+
+
+def average_steps_per_ant(average_steps_per_ant):
+    stps = np.arange(len(average_steps_per_ant))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        average_steps_per_ant[1:],
+        label="average food trip length per ant",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Length of Latest Successful Trips / Total Ants")
+    plt.title("Average Length of Successful Trips Over Time")
+    fig.savefig("images/average_length_of_food_trips.png")
