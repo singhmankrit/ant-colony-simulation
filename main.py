@@ -48,6 +48,7 @@ ant_list = [
 ]
 
 food_amounts = []
+ants_efficiency = []
 
 
 def update(frame):
@@ -60,6 +61,18 @@ def update(frame):
         for ant in ant_list:
             ant.next_step(frame)
         plots.draw_world(ax, environment, ant_list, frame)
+
+    if "total_ants_efficiency" in config["observables"]:
+        total_collected = (
+            len(environment.food_at_nest_instances) * config["ant_carry_amount"]
+        )
+        total_eaten = len(ant_list)  # as every ant eats 1 energy per step
+        total_energy_in_ants = sum(ant.energy for ant in ant_list)
+
+        efficiency = (total_collected - total_eaten) / (
+            total_energy_in_ants + total_collected
+        )
+        ants_efficiency.append(round(efficiency, 2))
 
 
 # Animate
