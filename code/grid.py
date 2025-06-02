@@ -39,7 +39,7 @@ class Grid:
         self.obstacle_positions.append(position)
         self.grid[position] = CellType.OBSTACLE.value
 
-    def evaporate_pheromones(self, decay_rate=0.01):
+    def evaporate_pheromones(self):
         self.food_path *= 1 - self.pheromone_decay
 
     def add_pheromone(self, position, direction, strength=1.0):

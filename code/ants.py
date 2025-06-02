@@ -69,8 +69,6 @@ class Ant:
             self.path_memory = []
             self.pheromone_strength = 0
 
-        # print("Ant moved to", self.pos)
-
     def explore_grid(self):
         x, y = self.pos
         directions = [
@@ -90,9 +88,6 @@ class Ant:
                     len(self.path_memory) >= 1 and (nx, ny) == self.path_memory[-1]
                 ):  # don't immediately take a step back
                     continue
-                # this is for debugging: we can verify that drop time = 2*pickup time in the beginning
-                # if (nx, ny) == self.grid.colony_position: # don't come back empty handed
-                #     continue
 
                 pheromone_val = self.grid.food_path[y, x, dir]
 
