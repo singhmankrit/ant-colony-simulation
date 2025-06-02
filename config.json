@@ -4,7 +4,8 @@
   "pheromone_decay": 0.01,
   "exploration_desire": 0.01,
   "ant_energy": 100,
-  "ant_max_carry_amount": 130,
+  "ant_carry_amount": 130,
+  "colony_start_amount": 1000,
   "observables": [
     "total_ants_efficiency",
     "time_to_first_path",

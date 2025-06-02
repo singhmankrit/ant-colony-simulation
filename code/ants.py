@@ -1,17 +1,15 @@
 import random
 from . import names
 
-STOMACH_SIZE: int = 100
-ANT_SATURATION_CARRY_AMOUNT: int = 130
 
 class Ant:
     def __init__(
         self,
         grid,
-        exploration_desire=0.1,
+        max_energy,
+        max_carry_amount,
+        exploration_desire,
         name=None,
-        start_saturation=STOMACH_SIZE,
-        saturation_carry_amount=ANT_SATURATION_CARRY_AMOUNT,
     ):
         if name is None:
             name = names.gen_name()
@@ -20,19 +18,22 @@ class Ant:
         # assume all ants start at colony
         self.pos = grid.colony_position
         self.path_memory = [self.pos]
-        self.pheromone_strength = 0
-        self.exploration_desire = exploration_desire
-        self.carry_amount = saturation_carry_amount
 
         # ant status
         self.has_food = False
         self.dead = False
-        self.saturation = start_saturation
+
+        # ant parameters
+        self.pheromone_strength = 0
+        self.exploration_desire = exploration_desire
+        self.energy = max_energy
+        self.max_energy = max_energy
+        self.carry_amount = max_carry_amount
 
     def next_step(self, step_number):
         if self.dead:
             return
-        if self.saturation <= 0 and self.path_memory:
+        if self.energy <= 0 and self.path_memory:
             # the ant is hungry and will go back to the colony to eat
             self.travel_back()
         elif self.has_food:
@@ -58,8 +59,8 @@ class Ant:
                 print(
                     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
                 )
-            self.saturation += self.grid.try_get_food(STOMACH_SIZE - self.saturation)
-            if self.saturation == 0:
+            self.energy += self.grid.try_get_food(self.max_energy - self.energy)
+            if self.energy == 0:
                 print(
                     f"\033[31m{self.name}\033[0m died from starvation at step: {step_number}"
                 )
@@ -107,7 +108,7 @@ class Ant:
 
         # Update path and position
         self.path_memory.append(self.pos)
-        self.saturation -= 2  # 1 for the step now and 1 for the step going back
+        self.energy -= 2  # 1 for the step now and 1 for the step going back
         self.pos = chosen_pos
 
     def travel_back(self):

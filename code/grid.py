@@ -2,9 +2,6 @@ import numpy as np
 from enum import Enum
 
 
-COLONY_FOOD_START_AMOUNT = 2500
-
-
 class CellType(Enum):
     EMPTY = 0
     COLONY = 1
@@ -13,7 +10,7 @@ class CellType(Enum):
 
 
 class Grid:
-    def __init__(self, size, start_food_amount=COLONY_FOOD_START_AMOUNT):
+    def __init__(self, size, start_food_amount):
         self.size = size
         self.food_path = np.zeros((size, size, 4), dtype=float)  # pheromones
         self.grid = np.zeros((size, size), dtype=int)

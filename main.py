@@ -19,7 +19,9 @@ environment_path = config["environment_path"]
 with open(environment_path, "r") as f:
     data = json.load(f)
 
-environment = grid.Grid(data["size"])
+environment = grid.Grid(
+    size=data["size"], start_food_amount=config["colony_start_amount"]
+)
 environment.place_colony(tuple(data["colony"]))
 for food in data["food"]:
     environment.add_food(tuple(food))
@@ -36,7 +38,12 @@ np.random.seed(seed)
 
 fig, ax = plt.subplots()
 ant_list = [
-    ants.Ant(environment, exploration_desire=config["exploration_desire"])
+    ants.Ant(
+        environment,
+        max_energy=config["ant_energy"],
+        max_carry_amount=config["ant_carry_amount"],
+        exploration_desire=config["exploration_desire"],
+    )
     for _ in range(config["num_ants"])
 ]
 
@@ -65,4 +72,4 @@ output_path = config["video_output"]
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 ani.save(output_path, writer="ffmpeg")
 
-plots.hist_distances(environment, steps=config["frames"])
+# plots.hist_distances(environment, steps=config["frames"])
