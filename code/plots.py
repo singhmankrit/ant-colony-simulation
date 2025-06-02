@@ -186,3 +186,48 @@ def hist_distances(grid, steps):
     plt.ylabel("gathered food / step")
     plt.title("Average food gathered per step")
     fig.savefig("images/average_gathered_food.png")
+
+
+def colony_food(food_gathered):
+    stps = np.arange(len(food_gathered))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        food_gathered[1:],
+        label="colony food",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Food at Colony")
+    plt.title("Food Available at Colony Over Time")
+    fig.savefig("images/colony_food.png")
+
+
+def ant_efficiency(ants_efficiency):
+    stps = np.arange(len(ants_efficiency))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        ants_efficiency[1:],
+        label="ant efficiency",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Collected Food / Consumed Energy")
+    plt.title("Total Ant Efficiency Over Time")
+    fig.savefig("images/ant_efficiency.png")
+
+
+def ant_trip_success_rate(success_trip_rate):
+    stps = np.arange(len(success_trip_rate))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        success_trip_rate[1:],
+        label="rate of successful trips",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Successful Trips / Total Completed Trips")
+    plt.title("Rate of Successful Trips Over Time")
+    fig.savefig("images/success_trips.png")
