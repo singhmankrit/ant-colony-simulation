@@ -105,9 +105,9 @@ Setup world GUI:
 (due 3 June 2025, 11:00)
 
 ### Planning
-@mankritsingh will do literature review on observables and add code to compare them with existing papers, along with error estimation. Also, he will add a feature to allow different ants to have different pheromone preference in the random walk (so some are explorers, others are followers)
+@mankritsingh will do literature review on observables and add code for some of them.
 
-@npaarts will work on making food finite / replenishable, add births / deaths and track ant population. Also, implement hunger so that ants don't wander too much without food.
+@npaarts will work on implementing hunger so that ants don't wander too much without food, work on performance and error metrics.
 
 @rjuyal will work on adding extensions to the simulation / explore Reinforcement Learning based ants / Machine Learning approaches.
 
@@ -117,6 +117,7 @@ Setup world GUI:
 
 - First, I searched for observables for ant colony simulation across literature
 - Then I added several observables and made key changes in !11
+- Also reviewed some Merge Requests
 
 The tracked observables look like this: 
 
