@@ -127,6 +127,37 @@ The tracked observables look like this:
 
 ![](./journal/week3/colony_food.png)
 
+@rjuyal
+
+This week I worked on adding different extensions(see !12). I first worked on creating different mode, i.e., constraints on the ants movement.
+The ones implemented are 
+- no_backtracking: ants cannot go immediately backward unless no other choice 
+- self_avoiding: ants cannot cross their own path. if no chocie will return to colony 
+- yes_backtracking: no constraint. 
+
+I have also added the elitist extension where the pheromones on the current best path gets reinforced at each timestep.
+I also explored adding machine learning(specifically reinforcement learning) for the ants' movement. While not currently in the codebase since I am varying hyperparameters, I have included
+the animation generated with the current version here. I also reviewed merge requests.
+
+No backtracking:
+
+![](./journal/week3/ant_simulation_noback.mp4)
+
+Yes backtracking:
+
+![](./journal/week3/ant_simulation_yesback.mp4)
+
+Self avoiding:
+
+![](./journal/week3/ant_simulation_selfavoid.mp4)
+
+Self avoiding with elitist extension:
+
+![](./journal/week3/ant_simulation_selfavoidelite.mp4)
+
+Reinforcement Learning(unfinished):
+
+![](./journal/week3/ant_simulation_rl.mp4)
 
 ## Reminder final deadline
 
