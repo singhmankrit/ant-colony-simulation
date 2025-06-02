@@ -1,10 +1,8 @@
-import numpy as np
 import random
 from . import names
 
 STOMACH_SIZE: int = 100
 ANT_SATURATION_CARRY_AMOUNT: int = 130
-
 
 class Ant:
     def __init__(
