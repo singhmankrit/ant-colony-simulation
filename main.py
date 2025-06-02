@@ -88,9 +88,7 @@ def update(frame):
             len(environment.food_at_nest_instances) * config["ant_carry_amount"]
         )
 
-        efficiency = (total_collected - total_energy_consumed) / (
-            total_energy_consumed + total_collected + 1e-3
-        )
+        efficiency = total_collected / (total_energy_consumed + 1e-3)
         ants_efficiency.append(round(efficiency, 2))
 
 
