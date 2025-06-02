@@ -188,6 +188,21 @@ def hist_distances(grid, steps):
     fig.savefig("images/average_gathered_food.png")
 
 
+def colony_food(food_gathered):
+    stps = np.arange(len(food_gathered))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        food_gathered[1:],
+        label="colony food",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Food at Colony")
+    plt.title("Food Available at Colony Over Time")
+    fig.savefig("images/colony_food.png")
+
+
 def ant_efficiency(ants_efficiency):
     stps = np.arange(len(ants_efficiency))
     fig = plt.figure()

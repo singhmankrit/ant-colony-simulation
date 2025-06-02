@@ -112,6 +112,8 @@ ani.save(output_path, writer="ffmpeg")
 
 # plots.hist_distances(environment, steps=config["frames"])
 
+plots.colony_food(food_amounts)
+
 if "total_ants_efficiency" in config["observables"]:
     plots.ant_efficiency(ants_efficiency)
 
