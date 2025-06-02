@@ -65,7 +65,7 @@ class Ant:
             self.self_avoid_return = False
             if self.has_food:
                 self.has_food = False
-                self.grid.update_best_path(self.food_path)
+                self.grid.update_best_path(self.food_path, step_number)
                 self.grid.colony_food += self.carry_amount
                 self.grid.food_at_nest_instances.append((self.name, step_number))
                 print(

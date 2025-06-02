@@ -115,3 +115,9 @@ if "time_to_first_path" in config["observables"]:
     else:
         time_to_first_path = None
     print("Time to First Path:", time_to_first_path)
+
+if "time_to_shortest_path" in config["observables"]:
+    print("Time to Shortest Path:", environment.best_path_found_step)
+
+if "shortest_path_length" in config["observables"]:
+    print("Shortest Path Length:", environment.best_path_length)

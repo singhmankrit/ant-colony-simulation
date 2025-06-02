@@ -34,6 +34,7 @@ class Grid:
 
         self.best_path = None
         self.best_path_length = float("inf")
+        self.best_path_found_step = 0
         self.elitist_ant_count = elitist_ant_count
         self.pheromone_constant = pheromone_constant
 
@@ -67,11 +68,12 @@ class Grid:
         assert self.colony_food >= 0
         return real_amount
 
-    def update_best_path(self, path):
+    def update_best_path(self, path, step_number):
         path_length = len(path)
         if path_length < self.best_path_length:
             self.best_path = path
             self.best_path_length = path_length
+            self.best_path_found_step = step_number
             # print(f"New best path length: {self.best_path_length}")
 
     def reinforce_best_path(self):
