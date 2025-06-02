@@ -218,6 +218,21 @@ def ant_efficiency(ants_efficiency, cycle):
     fig.savefig(f"images/{cycle}/ant_efficiency.png")
 
 
+def visited_area(areas, cycle):
+    stps = np.arange(len(areas))
+    fig = plt.figure()
+    plt.plot(
+        stps,
+        areas,
+        label="visited area",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Visited Area")
+    plt.title("Area explored by the colony")
+    fig.savefig(f"images/{cycle}/visited_area.png")
+
+
 def ant_trip_success_rate(success_trip_rate, cycle):
     stps = np.arange(len(success_trip_rate))
     fig = plt.figure()

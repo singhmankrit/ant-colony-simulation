@@ -37,6 +37,7 @@ mode = config["mode"]
 food_amount_amounts = []
 ants_efficiency_efficiencies = []
 success_trip_rate_rate = []
+visited_amounts = []
 
 seeds = [random.randint(1, 10000) for _ in range(cycles)]
 for cycle, seed in enumerate(seeds):
@@ -69,6 +70,7 @@ for cycle, seed in enumerate(seeds):
     ]
 
     food_amounts = []
+    visited_area = []
     ants_efficiency = []
     success_trip_rate = []
     total_energy_consumed = 0
@@ -99,6 +101,8 @@ for cycle, seed in enumerate(seeds):
 
                 if extension == "elitist":
                     environment.reinforce_best_path()
+
+                visited_area.append(np.count_nonzero(environment.visited))
 
                 plots.draw_world(ax, environment, ant_list, frame)
 
@@ -154,6 +158,8 @@ for cycle, seed in enumerate(seeds):
             ):
                 success_trip_rate.append(total_successful_trips / total_completed_trips)
 
+            visited_area.append(np.count_nonzero(environment.visited))
+
     if "colony_food" in config["observables"]:
         plots.colony_food(food_amounts, cycle)
 
@@ -176,9 +182,13 @@ for cycle, seed in enumerate(seeds):
     if "ant_trip_success_rate" in config["observables"]:
         plots.ant_trip_success_rate(success_trip_rate, cycle)
 
+    if "area_explored_per_time" in config["observables"]:
+        plots.visited_area(visited_area, cycle)
+
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
     success_trip_rate_rate.append(success_trip_rate)
+    visited_amounts.append(visited_area)
 
 
 # food_amount_amounts = np.array(food_amount_amounts)

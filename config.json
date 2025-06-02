@@ -16,7 +16,7 @@
     "area_explored_per_time"
   ],
   "seed": 42,
-  "cycles": 5,
+  "cycles": 50,
   "frames": 1000,
   "frame_interval": 200,
   "video_output": "images/ant_simulation.mp4",

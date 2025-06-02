@@ -22,6 +22,7 @@ class Grid:
         self.size = size
         self.food_path = np.zeros((size, size, 4), dtype=float)  # pheromones
         self.grid = np.zeros((size, size), dtype=int)
+        self.visited = np.full((size, size), False)
         self.colony_position = None
         self.food_positions = []
         self.obstacle_positions = []
