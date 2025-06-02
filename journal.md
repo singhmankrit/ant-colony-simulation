@@ -111,6 +111,21 @@ Setup world GUI:
 
 @rjuyal will work on adding extensions to the simulation / explore Reinforcement Learning based ants / Machine Learning approaches.
 
+### Progress Report 
+
+@mankritsingh
+
+- First, I searched for observables for ant colony simulation across literature
+- Then I added several observables and made key changes in !11
+
+The tracked observables look like this: 
+
+![](./journal/week3/ant_efficiency.png)
+
+![](./journal/week3/success_trips.png)
+
+![](./journal/week3/colony_food.png)
+
 
 ## Reminder final deadline
 
