@@ -201,3 +201,18 @@ def ant_efficiency(ants_efficiency):
     plt.ylabel("Ant Efficiency")
     plt.title("Total Ant Efficiency Over Time")
     fig.savefig("images/ant_efficiency.png")
+
+
+def ant_trip_success_rate(success_trip_rate):
+    stps = np.arange(len(success_trip_rate))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        success_trip_rate[1:],
+        label="rate of successful trips",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Successful Trips / Total Completed Trips")
+    plt.title("Rate of Successful Trips Over Time")
+    fig.savefig("images/success_trips.png")

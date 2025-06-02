@@ -32,6 +32,9 @@ class Ant:
         self.max_energy = max_energy
         self.carry_amount = max_carry_amount
 
+        self.success_trip = 0
+        self.completed_trip = 0
+
         # extensions
         self.mode = mode
         self.food_path = []
@@ -62,6 +65,7 @@ class Ant:
             print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
+            self.completed_trip += 1
             self.self_avoid_return = False
             if self.has_food:
                 self.has_food = False
@@ -71,6 +75,7 @@ class Ant:
                 print(
                     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
                 )
+                self.success_trip += 1
             self.energy += self.grid.try_get_food(self.max_energy - self.energy)
             if self.energy == 0:
                 print(

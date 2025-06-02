@@ -61,6 +61,7 @@ ant_list = [
 
 food_amounts = []
 ants_efficiency = []
+success_trip_rate = []
 total_energy_consumed = 0
 
 
@@ -69,6 +70,8 @@ def update(frame):
     ax.clear()
     food_amounts.append(environment.colony_food)
 
+    total_successful_trips = 0
+    total_completed_trips = 0
     if frame == 0:
         plots.draw_world(ax, environment, ant_list, step_number=0)
     else:
@@ -77,6 +80,8 @@ def update(frame):
             ant.next_step(frame)
             if not ant.dead:
                 total_energy_consumed += 1
+            total_successful_trips += ant.success_trip
+            total_completed_trips += ant.completed_trip
 
         if extension == "elitist":
             environment.reinforce_best_path()
@@ -90,6 +95,9 @@ def update(frame):
 
         efficiency = total_collected / (total_energy_consumed + 1e-3)
         ants_efficiency.append(round(efficiency, 2))
+
+    if "ant_trip_success_rate" in config["observables"] and total_completed_trips > 0:
+        success_trip_rate.append(total_successful_trips / total_completed_trips)
 
 
 # Animate
@@ -119,3 +127,6 @@ if "time_to_shortest_path" in config["observables"]:
 
 if "shortest_path_length" in config["observables"]:
     print("Shortest Path Length:", environment.best_path_length)
+
+if "ant_trip_success_rate" in config["observables"]:
+    plots.ant_trip_success_rate(success_trip_rate)
