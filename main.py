@@ -38,6 +38,8 @@ for food in data["food"]:
 for obstacle in data["obstacles"]:
     environment.add_obstacle(tuple(obstacle))
 
+environment.real_shortest_paths = environment.compute_shortest_paths()
+
 # Set simulation parameters
 environment.pheromone_decay = config["pheromone_decay"]
 seed = config["seed"]
@@ -132,6 +134,9 @@ if "time_to_first_path" in config["observables"]:
 
 if "time_to_shortest_path" in config["observables"]:
     print("Time to Shortest Path:", environment.best_path_found_step)
+
+for i, path in enumerate(environment.real_shortest_paths):
+    print(f"Real Shortest Path Length to Food #{i}: {len(path)}")
 
 if "shortest_path_length" in config["observables"]:
     print("Shortest Path Length:", environment.best_path_length)
