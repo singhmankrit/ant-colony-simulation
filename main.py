@@ -86,3 +86,14 @@ os.makedirs(os.path.dirname(output_path), exist_ok=True)
 ani.save(output_path, writer="ffmpeg")
 
 # plots.hist_distances(environment, steps=config["frames"])
+
+if "total_ants_efficiency" in config["observables"]:
+    plots.ant_efficiency(ants_efficiency)
+
+if "time_to_first_path" in config["observables"]:
+    if environment.food_at_nest_instances:
+        time_to_first_path = min(s for _, s in environment.food_at_nest_instances)
+    else:
+        time_to_first_path = None
+    print("Time to First Path:", time_to_first_path)
+

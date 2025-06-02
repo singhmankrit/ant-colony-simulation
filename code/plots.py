@@ -186,3 +186,18 @@ def hist_distances(grid, steps):
     plt.ylabel("gathered food / step")
     plt.title("Average food gathered per step")
     fig.savefig("images/average_gathered_food.png")
+
+
+def ant_efficiency(ants_efficiency):
+    stps = np.arange(len(ants_efficiency))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        ants_efficiency[1:],
+        label="ant efficiency",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Ant Efficiency")
+    plt.title("Total Ant Efficiency Over Time")
+    fig.savefig("images/ant_efficiency.png")
