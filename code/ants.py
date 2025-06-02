@@ -33,7 +33,6 @@ class Ant:
         self.saturation = start_saturation
         self.mode = mode
         self.food_path = []
-        self.self_avoid_location = None
         self.self_avoid_return = False
 
     def next_step(self, step_number):
@@ -122,7 +121,7 @@ class Ant:
                 return
 
             pheromone_val = self.grid.food_path[
-                y, x, calc_dir(self.pos, (nx, ny))
+                y, x, calc_dir(self.pos, self.path_memory[-1])
             ]
             score = self.exploration_desire + pheromone_val
             candidates.append(((nx, ny), score))
@@ -130,8 +129,7 @@ class Ant:
         # Weighted random selection
         total = sum(score for _, score in candidates)
         probs = [score / total for _, score in candidates]
-        chosen_pos = random.choices(
-            [pos for pos, _ in candidates], weights=probs)[0]
+        chosen_pos = random.choices([pos for pos, _ in candidates], weights=probs)[0]
 
         # Update path and position
         self.path_memory.append(self.pos)
