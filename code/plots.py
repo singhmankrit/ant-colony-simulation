@@ -213,7 +213,7 @@ def ant_efficiency(ants_efficiency):
     )
     plt.legend()
     plt.xlabel("Step")
-    plt.ylabel("Ant Efficiency")
+    plt.ylabel("Collected Food / Consumed Energy")
     plt.title("Total Ant Efficiency Over Time")
     fig.savefig("images/ant_efficiency.png")
 
