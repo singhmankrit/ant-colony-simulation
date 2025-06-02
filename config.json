@@ -5,7 +5,7 @@
   "exploration_desire": 0.01,
   "ant_energy": 100,
   "ant_carry_amount": 130,
-  "colony_start_amount": 1000,
+  "colony_start_amount": 2500,
   "observables": [
     "total_ants_efficiency",
     "time_to_first_path",
