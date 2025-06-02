@@ -10,8 +10,6 @@ class Ant:
         max_carry_amount,
         exploration_desire,
         name=None,
-        start_saturation=STOMACH_SIZE,
-        saturation_carry_amount=ANT_SATURATION_CARRY_AMOUNT,
         mode="no_backtracking",
     ):
         if name is None:
@@ -61,8 +59,7 @@ class Ant:
             path_length = len(self.path_memory)
             if path_length > 0:
                 self.pheromone_strength = 1 / path_length
-            print(
-                f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
+            print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
             self.self_avoid_return = False
@@ -70,8 +67,7 @@ class Ant:
                 self.has_food = False
                 self.grid.update_best_path(self.food_path)
                 self.grid.colony_food += self.carry_amount
-                self.grid.food_at_nest_instances.append(
-                    (self.name, step_number))
+                self.grid.food_at_nest_instances.append((self.name, step_number))
                 print(
                     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
                 )
@@ -100,8 +96,9 @@ class Ant:
                 if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
                     continue
                 if (
-                    self.mode == "no_backtracking" and len(
-                        self.path_memory) >= 1 and (nx, ny) == self.path_memory[-1]
+                    self.mode == "no_backtracking"
+                    and len(self.path_memory) >= 1
+                    and (nx, ny) == self.path_memory[-1]
                 ):  # don't immediately take a step back
                     continue
                 elif self.mode == "self_avoiding" and (nx, ny) in self.path_memory:

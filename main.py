@@ -19,14 +19,19 @@ environment_path = config["environment_path"]
 with open(environment_path, "r") as f:
     data = json.load(f)
 
-size=data["size"]
-start_food_amount=config["colony_start_amount"]
+size = data["size"]
+start_food_amount = config["colony_start_amount"]
 extension = config["extension"]
 elitist_ant_count = config["elitist_ant_count"]
 pheromone_constant = config["pheromone_constant"]
 
-environment = grid.Grid(size=size, extension=extension, start_food_amount=start_food_amount,
-                        elitist_ant_count=elitist_ant_count, pheromone_constant=pheromone_constant)
+environment = grid.Grid(
+    size=size,
+    extension=extension,
+    start_food_amount=start_food_amount,
+    elitist_ant_count=elitist_ant_count,
+    pheromone_constant=pheromone_constant,
+)
 environment.place_colony(tuple(data["colony"]))
 for food in data["food"]:
     environment.add_food(tuple(food))
@@ -49,7 +54,7 @@ ant_list = [
         max_energy=config["ant_energy"],
         max_carry_amount=config["ant_carry_amount"],
         exploration_desire=config["exploration_desire"],
-        mode=mode
+        mode=mode,
     )
     for _ in range(config["num_ants"])
 ]
@@ -75,7 +80,9 @@ def update(frame):
         total_collected = (
             len(environment.food_at_nest_instances) * config["ant_carry_amount"]
         )
-        total_eaten = frame * len(ant_list)  # as every ant eats 1 energy per step
+        total_eaten = frame * len(
+            ant_list
+        )  # as every ant eats 1 energy per step TODO: fix dead ants
         total_energy_in_ants = sum(ant.energy for ant in ant_list)
 
         efficiency = (total_collected - total_eaten) / (
