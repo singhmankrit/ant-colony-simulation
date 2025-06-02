@@ -19,7 +19,12 @@ environment_path = config["environment_path"]
 with open(environment_path, "r") as f:
     data = json.load(f)
 
-environment = grid.Grid(data["size"])
+extension = config["extension"]
+elitist_ant_count = config["elitist_ant_count"]
+pheromone_constant = config["pheromone_constant"]
+
+environment = grid.Grid(data["size"], extension=extension,
+                        elitist_ant_count=elitist_ant_count, pheromone_constant=pheromone_constant)
 environment.place_colony(tuple(data["colony"]))
 for food in data["food"]:
     environment.add_food(tuple(food))
@@ -33,10 +38,12 @@ seed = config["seed"]
 # Initialize
 random.seed(seed)
 np.random.seed(seed)
+mode = config["mode"]
 
 fig, ax = plt.subplots()
 ant_list = [
-    ants.Ant(environment, exploration_desire=config["exploration_desire"])
+    ants.Ant(
+        environment, exploration_desire=config["exploration_desire"], mode=mode)
     for _ in range(config["num_ants"])
 ]
 
@@ -52,6 +59,8 @@ def update(frame):
         environment.evaporate_pheromones()
         for ant in ant_list:
             ant.next_step(frame)
+        if extension == "elitist":
+            environment.reinforce_best_path()
         plots.draw_world(ax, environment, ant_list, frame)
 
 
