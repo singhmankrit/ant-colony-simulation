@@ -39,7 +39,7 @@ class Grid:
         self.elitist_ant_count = elitist_ant_count
         self.pheromone_constant = pheromone_constant
 
-        self.real_shortest_path = -1
+        self.real_shortest_paths = []
 
     def place_colony(self, position):
         self.colony_position = position
