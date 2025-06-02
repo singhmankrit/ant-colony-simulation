@@ -5,6 +5,7 @@
   "exploration_desire": 0.01,
   "ant_energy": 100,
   "ant_carry_amount": 130,
+  "enable_hunger": true,
   "colony_start_amount": 2500,
   "observables": [
     "total_ants_efficiency",
