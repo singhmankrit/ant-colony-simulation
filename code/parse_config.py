@@ -18,7 +18,6 @@ def parse_config(path: str) -> dict[str, Any]:
         "cycles": config.get("cycles", 1),
         "frames": config.get("frames", 300),
         "frame_interval": config.get("frame_interval", 200),
-        "video_output": config.get("video_output", "images/ant_simulation.mp4"),
         "mode": config.get("mode", "no_backtracking"),
         "extension": config.get("extension", "none"),
         "elitist_ant_count": config.get("elitist_ant_count", 5),

@@ -139,7 +139,7 @@ def draw_world(ax, grid, ants, step_number):
     )
 
 
-def hist_distances(grid, steps):
+def hist_distances(grid, steps, cycle):
     gathered = np.array([y for x, y in grid.food_gathered_instances])
     back = np.array([y for x, y in grid.food_at_nest_instances])
 
@@ -168,7 +168,7 @@ def hist_distances(grid, steps):
     plt.xlabel("step")
     plt.ylabel("gathered food")
     plt.title("Total food gathered")
-    fig.savefig("images/total_gathered_food.png")
+    fig.savefig(f"images/{cycle}/total_gathered_food.png")
 
     fig = plt.figure()
     plt.plot(
@@ -185,10 +185,10 @@ def hist_distances(grid, steps):
     plt.xlabel("step")
     plt.ylabel("gathered food / step")
     plt.title("Average food gathered per step")
-    fig.savefig("images/average_gathered_food.png")
+    fig.savefig(f"images/{cycle}/average_gathered_food.png")
 
 
-def colony_food(food_gathered):
+def colony_food(food_gathered, cycle):
     stps = np.arange(len(food_gathered))
     fig = plt.figure()
     plt.plot(
@@ -200,10 +200,10 @@ def colony_food(food_gathered):
     plt.xlabel("Step")
     plt.ylabel("Food at Colony")
     plt.title("Food Available at Colony Over Time")
-    fig.savefig("images/colony_food.png")
+    fig.savefig(f"images/{cycle}/colony_food.png")
 
 
-def ant_efficiency(ants_efficiency):
+def ant_efficiency(ants_efficiency, cycle):
     stps = np.arange(len(ants_efficiency))
     fig = plt.figure()
     plt.plot(
@@ -215,10 +215,10 @@ def ant_efficiency(ants_efficiency):
     plt.xlabel("Step")
     plt.ylabel("Collected Food / Consumed Energy")
     plt.title("Total Ant Efficiency Over Time")
-    fig.savefig("images/ant_efficiency.png")
+    fig.savefig(f"images/{cycle}/ant_efficiency.png")
 
 
-def ant_trip_success_rate(success_trip_rate):
+def ant_trip_success_rate(success_trip_rate, cycle):
     stps = np.arange(len(success_trip_rate))
     fig = plt.figure()
     plt.plot(
@@ -230,4 +230,4 @@ def ant_trip_success_rate(success_trip_rate):
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
     plt.title("Rate of Successful Trips Over Time")
-    fig.savefig("images/success_trips.png")
+    fig.savefig(f"images/{cycle}/success_trips.png")
