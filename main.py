@@ -23,8 +23,12 @@ extension = config["extension"]
 elitist_ant_count = config["elitist_ant_count"]
 pheromone_constant = config["pheromone_constant"]
 
-environment = grid.Grid(data["size"], extension=extension,
-                        elitist_ant_count=elitist_ant_count, pheromone_constant=pheromone_constant)
+environment = grid.Grid(
+    data["size"],
+    extension=extension,
+    elitist_ant_count=elitist_ant_count,
+    pheromone_constant=pheromone_constant,
+)
 environment.place_colony(tuple(data["colony"]))
 for food in data["food"]:
     environment.add_food(tuple(food))
@@ -34,16 +38,29 @@ for obstacle in data["obstacles"]:
 # Set simulation parameters
 environment.pheromone_decay = config["pheromone_decay"]
 seed = config["seed"]
+cycles = config["cycles"]
 
 # Initialize
 random.seed(seed)
 np.random.seed(seed)
 mode = config["mode"]
 
+seeds = [random.randint(1, 10000) for _ in range(cycles)]
+for cycle, seed in enumerate(seeds):
+    random.seed(seed)
+    np.random.seed(seed)
+
+    ant_list = [
+        ants.Ant(
+            environment, exploration_desire=config["exploration_desire"], mode=mode
+        )
+        for _ in range(config["num_ants"])
+    ]
+
+
 fig, ax = plt.subplots()
 ant_list = [
-    ants.Ant(
-        environment, exploration_desire=config["exploration_desire"], mode=mode)
+    ants.Ant(environment, exploration_desire=config["exploration_desire"], mode=mode)
     for _ in range(config["num_ants"])
 ]
 
