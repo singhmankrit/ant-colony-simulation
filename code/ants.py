@@ -10,11 +10,15 @@ class Ant:
         max_carry_amount,
         exploration_desire,
         name=None,
+        start_saturation=STOMACH_SIZE,
+        saturation_carry_amount=ANT_SATURATION_CARRY_AMOUNT,
+        mode="no_backtracking",
     ):
         if name is None:
             name = names.gen_name()
         self.name = name
         self.grid = grid
+
         # assume all ants start at colony
         self.pos = grid.colony_position
         self.path_memory = [self.pos]
@@ -30,10 +34,15 @@ class Ant:
         self.max_energy = max_energy
         self.carry_amount = max_carry_amount
 
+        # extensions
+        self.mode = mode
+        self.food_path = []
+        self.self_avoid_return = False
+
     def next_step(self, step_number):
         if self.dead:
             return
-        if self.energy <= 0 and self.path_memory:
+        if (self.energy <= 0 or self.self_avoid_return) and self.path_memory:
             # the ant is hungry and will go back to the colony to eat
             self.travel_back()
         elif self.has_food:
@@ -45,17 +54,24 @@ class Ant:
 
         if not self.has_food and self.pos in self.grid.food_positions:
             self.has_food = True
+            self.food_path = self.path_memory[:]
+            self.food_path.append(self.pos)
+
             self.grid.food_gathered_instances.append((self.name, step_number))
             path_length = len(self.path_memory)
             if path_length > 0:
                 self.pheromone_strength = 1 / path_length
-            print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
+            print(
+                f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
+            self.self_avoid_return = False
             if self.has_food:
                 self.has_food = False
+                self.grid.update_best_path(self.food_path)
                 self.grid.colony_food += self.carry_amount
-                self.grid.food_at_nest_instances.append((self.name, step_number))
+                self.grid.food_at_nest_instances.append(
+                    (self.name, step_number))
                 print(
                     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
                 )
@@ -84,17 +100,24 @@ class Ant:
                 if (nx, ny) in self.grid.obstacle_positions:  # avoid obstacles
                     continue
                 if (
-                    len(self.path_memory) >= 1 and (nx, ny) == self.path_memory[-1]
+                    self.mode == "no_backtracking" and len(
+                        self.path_memory) >= 1 and (nx, ny) == self.path_memory[-1]
                 ):  # don't immediately take a step back
                     continue
-
+                elif self.mode == "self_avoiding" and (nx, ny) in self.path_memory:
+                    continue
                 pheromone_val = self.grid.food_path[y, x, dir]
 
                 score = self.exploration_desire + pheromone_val  # step score
                 candidates.append(((nx, ny), score))
 
         if not candidates:
-            nx, ny = self.path_memory[-1]
+            if self.mode == "no_backtracking":
+                nx, ny = self.path_memory[-1]
+            if self.mode == "self_avoiding":
+                self.self_avoid_return = True
+                return
+
             pheromone_val = self.grid.food_path[
                 y, x, calc_dir(self.pos, self.path_memory[-1])
             ]
