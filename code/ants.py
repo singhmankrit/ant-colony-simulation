@@ -2,9 +2,19 @@ import numpy as np
 import random
 from . import names
 
+STOMACH_SIZE: int = 100
+ANT_SATURATION_CARRY_AMOUNT: int = 130
+
 
 class Ant:
-    def __init__(self, grid, exploration_desire=0.1, name=None):
+    def __init__(
+        self,
+        grid,
+        exploration_desire=0.1,
+        name=None,
+        start_saturation=STOMACH_SIZE,
+        saturation_carry_amount=ANT_SATURATION_CARRY_AMOUNT,
+    ):
         if name is None:
             name = names.gen_name()
         self.name = name
@@ -14,15 +24,25 @@ class Ant:
         self.path_memory = [self.pos]
         self.pheromone_strength = 0
         self.exploration_desire = exploration_desire
+        self.carry_amount = saturation_carry_amount
 
         # ant status
         self.has_food = False
+        self.dead = False
+        self.saturation = start_saturation
 
     def next_step(self, step_number):
-        if not self.has_food:
-            self.explore_grid()
-        else:
+        if self.dead:
+            return
+        if self.saturation <= 0 and self.path_memory:
+            # the ant is hungry and will go back to the colony to eat
             self.travel_back()
+        elif self.has_food:
+            # the ant is carrying food back to the nest
+            self.travel_back()
+        else:
+            # the ant is attempting to gather food
+            self.explore_grid()
 
         if not self.has_food and self.pos in self.grid.food_positions:
             self.has_food = True
@@ -35,8 +55,17 @@ class Ant:
         elif self.pos == self.grid.colony_position:
             if self.has_food:
                 self.has_food = False
+                self.grid.colony_food += self.carry_amount
                 self.grid.food_at_nest_instances.append((self.name, step_number))
-                print(f"\033[94m{self.name}\033[0m dropped food at step: {step_number}")
+                print(
+                    f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
+                )
+            self.saturation += self.grid.try_get_food(STOMACH_SIZE - self.saturation)
+            if self.saturation == 0:
+                print(
+                    f"\033[31m{self.name}\033[0m died from starvation at step: {step_number}"
+                )
+                self.dead = True
             self.path_memory = []
             self.pheromone_strength = 0
 
@@ -85,6 +114,7 @@ class Ant:
 
         # Update path and position
         self.path_memory.append(self.pos)
+        self.saturation -= 2  # 1 for the step now and 1 for the step going back
         self.pos = chosen_pos
 
     def travel_back(self):

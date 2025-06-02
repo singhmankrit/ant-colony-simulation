@@ -40,9 +40,12 @@ ant_list = [
     for _ in range(config["num_ants"])
 ]
 
+food_amounts = []
+
 
 def update(frame):
     ax.clear()
+    food_amounts.append(environment.colony_food)
     if frame == 0:
         plots.draw_world(ax, environment, ant_list, step_number=0)
     else:

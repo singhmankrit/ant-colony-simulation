@@ -107,6 +107,37 @@ def draw_world(ax, grid, ants, step_number):
                 zorder=10,
             )
 
+    # Position top-left corner (some padding from edge)
+    padding = 0.3
+    ax.text(
+        padding,
+        size - padding,
+        f"Ants alive: {len([ant for ant in ants if not ant.dead])}",
+        fontsize=10,
+        color="red",
+        weight="bold",
+        ha="left",
+        va="top",
+        zorder=20,
+        bbox=dict(
+            facecolor="white", alpha=0.7, edgecolor="none", boxstyle="round,pad=0.3"
+        ),
+    )
+    ax.text(
+        size - padding,
+        size - padding,
+        f"Food at colony: {grid.colony_food}",
+        fontsize=10,
+        color="green",
+        weight="bold",
+        ha="right",
+        va="top",
+        zorder=20,
+        bbox=dict(
+            facecolor="white", alpha=0.7, edgecolor="none", boxstyle="round,pad=0.3"
+        ),
+    )
+
 
 def hist_distances(grid, steps):
     gathered = np.array([y for x, y in grid.food_gathered_instances])
