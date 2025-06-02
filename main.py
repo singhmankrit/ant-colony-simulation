@@ -66,7 +66,7 @@ def update(frame):
         total_collected = (
             len(environment.food_at_nest_instances) * config["ant_carry_amount"]
         )
-        total_eaten = len(ant_list)  # as every ant eats 1 energy per step
+        total_eaten = frame * len(ant_list)  # as every ant eats 1 energy per step
         total_energy_in_ants = sum(ant.energy for ant in ant_list)
 
         efficiency = (total_collected - total_eaten) / (
@@ -96,4 +96,3 @@ if "time_to_first_path" in config["observables"]:
     else:
         time_to_first_path = None
     print("Time to First Path:", time_to_first_path)
-
