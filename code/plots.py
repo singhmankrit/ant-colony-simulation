@@ -152,6 +152,7 @@ def colony_food(food_gathered, cycle):
     plt.ylabel("Food at Colony")
     plt.title("Food Available at Colony Over Time")
     fig.savefig(f"images/{cycle}/colony_food.png")
+    plt.close()
 
 
 def ant_efficiency(ants_efficiency, cycle):
@@ -167,6 +168,7 @@ def ant_efficiency(ants_efficiency, cycle):
     plt.ylabel("Collected Food / Consumed Energy")
     plt.title("Total Ant Efficiency Over Time")
     fig.savefig(f"images/{cycle}/ant_efficiency.png")
+    plt.close()
 
 
 def visited_area(areas, cycle):
@@ -182,6 +184,7 @@ def visited_area(areas, cycle):
     plt.ylabel("Visited Area")
     plt.title("Area explored by the colony")
     fig.savefig(f"images/{cycle}/visited_area.png")
+    plt.close()
 
 
 def ant_trip_success_rate(success_trip_rate, cycle):
@@ -197,3 +200,4 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.ylabel("Successful Trips / Total Completed Trips")
     plt.title("Rate of Successful Trips Over Time")
     fig.savefig(f"images/{cycle}/success_trips.png")
+    plt.close()
