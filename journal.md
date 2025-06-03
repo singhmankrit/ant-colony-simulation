@@ -159,6 +159,16 @@ Reinforcement Learning(unfinished):
 
 ![](./journal/week3/ant_simulation_rl.mp4)
 
+@npaarts
+
+I worked on adding hunger to the ants and the possibility for them to die if the colony had no food and their
+stomach was empty.
+After that I started working on automatically doing multiple cycles of simulations to generate uncorrrelated
+samples for calculating the errorbars,
+for performance we thought it was very bad, but it ended up being the animation. Keeping the animation behind
+a config option meant that if we turned it off a cycle (12 ants for 1000 steps) took only ~50 ms instead
+of ~30 seconds which makes it viable to generate large enough samples to get good statistics on the observables.
+
 ## Reminder final deadline
 
 The deadline for project 3 is **9 June 23:59**. By then, you must have uploaded the presentation slides to the repository, and the repository must contain the latest version of the code.
