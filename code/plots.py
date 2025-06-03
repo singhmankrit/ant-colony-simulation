@@ -276,10 +276,17 @@ def plot_paths_on_grid(environment):
         if not path:
             continue
         real_length = len(path) - 1
-        xs, ys = zip(*[(x + 0.5, y + 0.5) for x, y in path])
-        ax.plot(xs, ys, color="blue", linewidth=2, alpha=0.6)
-        x0, y0 = path[-1]
-        ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
+        for (x1, y1), (x2, y2) in zip(path, path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="blue",
+                alpha=0.6,
+            )
 
     # --- Plot ant's best path in red ---
     ant_best_path = environment.best_path
@@ -323,5 +330,5 @@ def plot_paths_on_grid(environment):
     )
 
     plt.title("Paths from Colony to Food")
-    plt.tight_layout(rect=[0, 0.05, 1, 1])  # Reserve space for the legend
+    plt.tight_layout(rect=[0, 0.05, 1, 1])
     plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")
