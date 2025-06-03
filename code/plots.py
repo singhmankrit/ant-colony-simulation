@@ -248,7 +248,7 @@ def average_steps_per_ant(average_steps_per_ant):
 
 
 def plot_paths_on_grid(environment):
-    fig, ax = plt.subplots(figsize=(6, 7))
+    _, ax = plt.subplots(figsize=(6, 7))
     ax.set_xlim(0, environment.size)
     ax.set_ylim(0, environment.size)
     ax.set_xticks(range(environment.size + 1))
@@ -256,7 +256,6 @@ def plot_paths_on_grid(environment):
     ax.set_aspect("equal")
     ax.grid(True)
 
-    # Color grid
     for x in range(environment.size):
         for y in range(environment.size):
             val = environment.grid[x, y]
@@ -277,17 +276,8 @@ def plot_paths_on_grid(environment):
         if not path:
             continue
         real_length = len(path) - 1
-        for (x1, y1), (x2, y2) in zip(path, path[1:]):
-            ax.arrow(
-                x1 + 0.5,
-                y1 + 0.5,
-                (x2 - x1) * 0.8,
-                (y2 - y1) * 0.8,
-                head_width=0.2,
-                length_includes_head=True,
-                color="blue",
-                alpha=0.6,
-            )
+        xs, ys = zip(*[(x + 0.5, y + 0.5) for x, y in path])
+        ax.plot(xs, ys, color="blue", linewidth=2, alpha=0.6)
         x0, y0 = path[-1]
         ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
 
@@ -327,10 +317,11 @@ def plot_paths_on_grid(environment):
         handles=legend_elements,
         loc="upper center",
         bbox_to_anchor=(0.5, -0.08),
+        ncol=2,
         frameon=False,
         fontsize=10,
     )
 
     plt.title("Paths from Colony to Food")
-    plt.tight_layout(rect=[0, 0.05, 1, 1])
+    plt.tight_layout(rect=[0, 0.05, 1, 1])  # Reserve space for the legend
     plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")
