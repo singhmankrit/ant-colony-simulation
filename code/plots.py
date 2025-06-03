@@ -246,3 +246,52 @@ def average_steps_per_ant(average_steps_per_ant):
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
     plt.title("Average Length of Successful Trips Over Time")
     fig.savefig("images/average_length_of_food_trips.png")
+
+
+def plot_paths_on_grid(environment):
+    # --- Plot ---
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_xlim(0, environment.size)
+    ax.set_ylim(0, environment.size)
+    ax.set_xticks(range(environment.size + 1))
+    ax.set_yticks(range(environment.size + 1))
+    ax.set_aspect("equal")
+    ax.grid(True)
+
+    # Color grid
+    for x in range(environment.size):
+        for y in range(environment.size):
+            val = environment.grid[x, y]
+            if val == 1:
+                color = "red"  # Colony
+            elif val == 2:
+                color = "green"  # Food
+            elif val == 3:
+                color = "black"  # Obstacle
+            else:
+                continue
+            rect = patches.Rectangle((x, y), 1, 1, facecolor=color, edgecolor="black")
+            ax.add_patch(rect)
+
+    # Plot paths as arrows or lines
+    for i, path in enumerate(environment.real_shortest_paths):
+        for (x1, y1), (x2, y2) in zip(path, path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="blue",
+                alpha=0.6,
+            )
+            xs, ys = zip(*path)
+            ax.text(xs[-1] + 0.1, ys[-1], f"L={len(path) -1}", fontsize=9, color="blue")
+        # Label path
+        if path:
+            x0, y0 = path[-1]
+            ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
+
+    plt.title("Shortest Paths from Colony to Food")
+    plt.savefig("images/shortest_paths.png", dpi=300)
