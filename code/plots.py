@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
-
-from . import grid
+from matplotlib.lines import Line2D
 
 
 def draw_world(ax, grid, ants, step_number):
@@ -249,8 +248,7 @@ def average_steps_per_ant(average_steps_per_ant):
 
 
 def plot_paths_on_grid(environment):
-    # --- Plot ---
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(6, 7))
     ax.set_xlim(0, environment.size)
     ax.set_ylim(0, environment.size)
     ax.set_xticks(range(environment.size + 1))
@@ -273,8 +271,12 @@ def plot_paths_on_grid(environment):
             rect = patches.Rectangle((x, y), 1, 1, facecolor=color, edgecolor="black")
             ax.add_patch(rect)
 
-    # Plot paths as arrows or lines
+    # --- Plot real shortest paths in blue ---
+    real_length = None
     for i, path in enumerate(environment.real_shortest_paths):
+        if not path:
+            continue
+        real_length = len(path) - 1
         for (x1, y1), (x2, y2) in zip(path, path[1:]):
             ax.arrow(
                 x1 + 0.5,
@@ -286,34 +288,49 @@ def plot_paths_on_grid(environment):
                 color="blue",
                 alpha=0.6,
             )
-            xs, ys = zip(*path)
-            ax.text(xs[-1] + 0.1, ys[-1], f"L={len(path) -1}", fontsize=9, color="blue")
-        # Label path
-        if path:
-            x0, y0 = path[-1]
-            ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
-
-    # Plot paths as arrows or lines
-    ant_best_path = environment.best_path
-    for (x1, y1), (x2, y2) in zip(ant_best_path, ant_best_path[1:]):
-        ax.arrow(
-            x1 + 0.5,
-            y1 + 0.5,
-            (x2 - x1) * 0.8,
-            (y2 - y1) * 0.8,
-            head_width=0.2,
-            length_includes_head=True,
-            color="red",
-            alpha=0.6,
-        )
-        xs, ys = zip(*ant_best_path)
-        ax.text(
-            xs[-1] + 0.1, ys[-1], f"L={len(ant_best_path) -1}", fontsize=9, color="red"
-        )
-    # Label path
-    if ant_best_path:
         x0, y0 = path[-1]
+        ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
+
+    # --- Plot ant's best path in red ---
+    ant_best_path = environment.best_path
+    ant_length = None
+    if ant_best_path:
+        ant_length = len(ant_best_path) - 1
+        for (x1, y1), (x2, y2) in zip(ant_best_path, ant_best_path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="red",
+                alpha=0.6,
+            )
+        x0, y0 = ant_best_path[-1]
         ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="red", ha="center", va="center")
 
-    plt.title("Shortest Paths from Colony to Food")
-    plt.savefig("images/shortest_paths.png", dpi=300)
+    # --- Add bottom legend ---
+    legend_elements = []
+    if real_length is not None:
+        legend_elements.append(
+            Line2D(
+                [0], [0], color="blue", lw=2, label=f"Shortest Path (L={real_length})"
+            )
+        )
+    if ant_length is not None:
+        legend_elements.append(
+            Line2D([0], [0], color="red", lw=2, label=f"Ant Path (L={ant_length})")
+        )
+
+    ax.legend(
+        handles=legend_elements,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.08),
+        frameon=False,
+        fontsize=10,
+    )
+
+    plt.title("Paths from Colony to Food")
+    plt.tight_layout(rect=[0, 0.05, 1, 1])
+    plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")
