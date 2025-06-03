@@ -356,7 +356,7 @@ def plot_paths_on_grid(environment, all_successful_paths):
         Patch(
             facecolor=cm.Wistia(0.7),
             edgecolor="black",
-            label="Avg. Visited Cells on a Successful Trip",
+            label="Visit Frequency for Successful Trips",
         )
     )
 

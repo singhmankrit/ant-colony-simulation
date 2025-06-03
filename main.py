@@ -140,10 +140,10 @@ if "time_to_shortest_path" in config["observables"]:
     print("Time to Shortest Path:", environment.best_path_found_step)
 
 for i, path in enumerate(environment.real_shortest_paths):
-    print(f"Real Shortest Path Length to Food #{i}: {len(path)-1}")
+    print(f"Real Shortest Path Length to Food: {len(path)-1}")
 
 if "shortest_path_length" in config["observables"]:
-    print(f"Shortest Path Length: {environment.best_path_length-1}")
+    print(f"Shortest Path Length found by Ants: {environment.best_path_length-1}")
 
 if "ant_trip_success_rate" in config["observables"]:
     plots.ant_trip_success_rate(success_trip_rate)
