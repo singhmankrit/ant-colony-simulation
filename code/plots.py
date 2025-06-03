@@ -293,5 +293,27 @@ def plot_paths_on_grid(environment):
             x0, y0 = path[-1]
             ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="blue", ha="center", va="center")
 
+    # Plot paths as arrows or lines
+    ant_best_path = environment.best_path
+    for (x1, y1), (x2, y2) in zip(ant_best_path, ant_best_path[1:]):
+        ax.arrow(
+            x1 + 0.5,
+            y1 + 0.5,
+            (x2 - x1) * 0.8,
+            (y2 - y1) * 0.8,
+            head_width=0.2,
+            length_includes_head=True,
+            color="red",
+            alpha=0.6,
+        )
+        xs, ys = zip(*ant_best_path)
+        ax.text(
+            xs[-1] + 0.1, ys[-1], f"L={len(ant_best_path) -1}", fontsize=9, color="red"
+        )
+    # Label path
+    if ant_best_path:
+        x0, y0 = path[-1]
+        ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="red", ha="center", va="center")
+
     plt.title("Shortest Paths from Colony to Food")
     plt.savefig("images/shortest_paths.png", dpi=300)
