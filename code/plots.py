@@ -139,55 +139,6 @@ def draw_world(ax, grid, ants, step_number):
     )
 
 
-def hist_distances(grid, steps, cycle):
-    gathered = np.array([y for x, y in grid.food_gathered_instances])
-    back = np.array([y for x, y in grid.food_at_nest_instances])
-
-    cum_gathered = np.zeros(steps)
-    cum_back = np.zeros(steps)
-    stps = np.arange(steps)
-
-    for step in gathered:
-        cum_gathered[step:] += 1
-
-    for step in back:
-        cum_back[step:] += 1
-
-    fig = plt.figure()
-    plt.plot(
-        stps,
-        cum_gathered,
-        label="total gathered food",
-    )
-    plt.plot(
-        stps,
-        cum_back,
-        label="food brought to the colony",
-    )
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("gathered food")
-    plt.title("Total food gathered")
-    fig.savefig(f"images/{cycle}/total_gathered_food.png")
-
-    fig = plt.figure()
-    plt.plot(
-        stps[1:],
-        cum_gathered[1:] / stps[1:],
-        label="gathered food/step",
-    )
-    plt.plot(
-        stps[1:],
-        cum_back[1:] / stps[1:],
-        label="food brought to the colony/step",
-    )
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("gathered food / step")
-    plt.title("Average food gathered per step")
-    fig.savefig(f"images/{cycle}/average_gathered_food.png")
-
-
 def colony_food(food_gathered, cycle):
     stps = np.arange(len(food_gathered))
     fig = plt.figure()
