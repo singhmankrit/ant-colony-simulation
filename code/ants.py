@@ -35,6 +35,7 @@ class Ant:
         self.success_trip = 0
         self.completed_trip = 0
         self.last_food_trip_length = 0
+        self.all_successful_paths = []
 
         # extensions
         self.mode = mode
@@ -78,6 +79,7 @@ class Ant:
                 )
                 self.success_trip += 1
                 self.last_food_trip_length = len(self.food_path)
+                self.all_successful_paths.append(self.food_path)
             self.energy += self.grid.try_get_food(self.max_energy - self.energy)
             if self.energy == 0:
                 print(

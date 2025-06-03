@@ -1,7 +1,10 @@
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import numpy as np
+from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
+from matplotlib.colors import Normalize, ListedColormap
+import matplotlib.cm as cm
 
 
 def draw_world(ax, grid, ants, step_number):
@@ -247,27 +250,55 @@ def average_steps_per_ant(average_steps_per_ant):
     fig.savefig("images/average_length_of_food_trips.png")
 
 
-def plot_paths_on_grid(environment):
+def plot_paths_on_grid(environment, all_successful_paths):
+    # --- Compute visitation heatmap ---
+    visit_counts = np.zeros((environment.size, environment.size), dtype=int)
+    for ant_paths in all_successful_paths:
+        for path in ant_paths:
+            for x, y in path:
+                visit_counts[x, y] += 1
+
+    max_count = np.max(visit_counts)
+    norm = Normalize(vmin=0, vmax=max_count if max_count > 0 else 1)
+
+    # --- Transparent light yellow colormap ---
+    light_yellow_cmap = cm.get_cmap("Wistia", 256)
+    colors = light_yellow_cmap(np.linspace(0, 1, 256))
+    colors[:, -1] = np.linspace(0, 0.4, 256)  # transparency from 0 to 0.4
+    transparent_yellow_cmap = ListedColormap(colors)
+
+    # --- Plotting setup ---
     _, ax = plt.subplots(figsize=(6, 7))
     ax.set_xlim(0, environment.size)
     ax.set_ylim(0, environment.size)
     ax.set_xticks(range(environment.size + 1))
     ax.set_yticks(range(environment.size + 1))
     ax.set_aspect("equal")
-    ax.grid(True)
+    ax.grid(color="gray", alpha=0.3)
 
+    # --- Draw environment grid with visit shading ---
     for x in range(environment.size):
         for y in range(environment.size):
             val = environment.grid[x, y]
+
+            visit_value = (
+                transparent_yellow_cmap(norm(visit_counts[x, y]))
+                if visit_counts[x, y] > 0
+                else "white"
+            )
+
             if val == 1:
-                color = "red"  # Colony
+                face_color = "red"  # Colony
             elif val == 2:
-                color = "green"  # Food
+                face_color = "green"  # Food
             elif val == 3:
-                color = "black"  # Obstacle
+                face_color = "black"  # Obstacle
             else:
-                continue
-            rect = patches.Rectangle((x, y), 1, 1, facecolor=color, edgecolor="black")
+                face_color = visit_value
+
+            rect = patches.Rectangle(
+                (x, y), 1, 1, facecolor=face_color, edgecolor="black"
+            )
             ax.add_patch(rect)
 
     # --- Plot real shortest paths in blue ---
@@ -285,7 +316,7 @@ def plot_paths_on_grid(environment):
                 head_width=0.2,
                 length_includes_head=True,
                 color="blue",
-                alpha=0.6,
+                alpha=0.8,
             )
 
     # --- Plot ant's best path in red ---
@@ -302,13 +333,14 @@ def plot_paths_on_grid(environment):
                 head_width=0.2,
                 length_includes_head=True,
                 color="red",
-                alpha=0.6,
+                alpha=0.8,
             )
         x0, y0 = ant_best_path[-1]
         ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="red", ha="center", va="center")
 
     # --- Add bottom legend ---
     legend_elements = []
+
     if real_length is not None:
         legend_elements.append(
             Line2D(
@@ -320,10 +352,14 @@ def plot_paths_on_grid(environment):
             Line2D([0], [0], color="red", lw=2, label=f"Ant Path (L={ant_length})")
         )
 
+    legend_elements.append(
+        Patch(facecolor=cm.Wistia(0.7), edgecolor="black", label="Avg. Visited Cells")
+    )
+
     ax.legend(
         handles=legend_elements,
         loc="upper center",
-        bbox_to_anchor=(0.5, -0.08),
+        bbox_to_anchor=(0.5, -0.1),
         ncol=2,
         frameon=False,
         fontsize=10,

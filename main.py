@@ -66,6 +66,7 @@ ants_efficiency = []
 success_trip_rate = []
 total_energy_consumed = 0
 avg_food_trip_length = []
+all_successful_paths = []
 
 
 def update(frame):
@@ -107,6 +108,9 @@ def update(frame):
     if "ant_trip_success_rate" in config["observables"] and total_completed_trips > 0:
         success_trip_rate.append(total_successful_trips / total_completed_trips)
 
+    for ant in ant_list:
+        all_successful_paths.append(ant.all_successful_paths)
+
 
 # Animate
 ani = animation.FuncAnimation(
@@ -147,4 +151,4 @@ if "ant_trip_success_rate" in config["observables"]:
 if "average_steps_per_ant" in config["observables"]:
     plots.average_steps_per_ant(avg_food_trip_length)
 
-plots.plot_paths_on_grid(environment)
+plots.plot_paths_on_grid(environment, all_successful_paths)
