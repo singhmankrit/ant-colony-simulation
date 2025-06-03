@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 from enum import Enum
 from . import ants
 
@@ -37,6 +38,8 @@ class Grid:
         self.best_path_found_step = 0
         self.elitist_ant_count = elitist_ant_count
         self.pheromone_constant = pheromone_constant
+
+        self.real_shortest_paths = []
 
     def place_colony(self, position):
         self.colony_position = position
@@ -92,3 +95,27 @@ class Grid:
                 * self.elitist_ant_count
                 / self.best_path_length,
             )
+
+    def compute_shortest_paths(self):
+        shortest_paths = []
+
+        G = nx.grid_2d_graph(self.size, self.size)
+
+        # Remove obstacles
+        for x, y in self.obstacle_positions:
+            G.remove_node((x, y))
+
+        try:
+            for food_position in self.food_positions:
+                shortest_paths.append(
+                    nx.shortest_path(
+                        G,
+                        source=self.colony_position,
+                        target=food_position,
+                        weight=None,
+                    )
+                )
+        except nx.NetworkXNoPath:
+            return []
+
+        return shortest_paths
