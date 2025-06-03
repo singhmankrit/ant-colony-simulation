@@ -114,11 +114,13 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if (
-                "ant_trip_success_rate" in config["observables"]
-                and total_completed_trips > 0
-            ):
-                success_trip_rate.append(total_successful_trips / total_completed_trips)
+            if "ant_trip_success_rate" in config["observables"]:
+                if total_completed_trips == 0:
+                    success_trip_rate.append(np.nan)
+                else:
+                    success_trip_rate.append(
+                        total_successful_trips / total_completed_trips
+                    )
 
         # Animate
         ani = animation.FuncAnimation(
@@ -152,11 +154,13 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if (
-                "ant_trip_success_rate" in config["observables"]
-                and total_completed_trips > 0
-            ):
-                success_trip_rate.append(total_successful_trips / total_completed_trips)
+            if "ant_trip_success_rate" in config["observables"]:
+                if total_completed_trips == 0:
+                    success_trip_rate.append(np.nan)
+                else:
+                    success_trip_rate.append(
+                        total_successful_trips / total_completed_trips
+                    )
 
             visited_area.append(np.count_nonzero(environment.visited))
 
@@ -196,15 +200,17 @@ ants_efficiency_tot = np.array(ants_efficiency_efficiencies)
 success_trip_rate_tot = np.array(success_trip_rate_rate)
 visited_amount_tot = np.array(visited_amounts)
 
-food_amount_std = np.std(food_amount_tot, axis=0)
-ants_efficiency_std = np.std(ants_efficiency_tot, axis=0)
-success_trip_rate_std = np.std(success_trip_rate_tot, axis=0)
-visited_amount_std = np.std(visited_amount_tot, axis=0)
-
 food_amount_avg = np.average(food_amount_tot, axis=0)
 ants_efficiency_avg = np.average(ants_efficiency_tot, axis=0)
 success_trip_rate_avg = np.average(success_trip_rate_tot, axis=0)
 visited_amount_avg = np.average(visited_amount_tot, axis=0)
+
+food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg)
+ants_efficiency_std = np.std(ants_efficiency_tot, axis=0, mean=ants_efficiency_avg)
+success_trip_rate_std = np.std(
+    success_trip_rate_tot, axis=0, mean=success_trip_rate_avg
+)
+visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
 
 x = np.arange(config["frames"])  # x-axis points
 
@@ -246,9 +252,9 @@ plt.close()
 
 # Success Trip Rate plot
 plt.figure(figsize=(8, 5))
-plt.plot(x[1:], success_trip_rate_avg, label="Success Trip Rate Avg", color="red")
+plt.plot(x, success_trip_rate_avg, label="Success Trip Rate Avg", color="red")
 plt.fill_between(
-    x[1:],
+    x,
     success_trip_rate_avg - success_trip_rate_std,
     success_trip_rate_avg + success_trip_rate_std,
     color="red",
