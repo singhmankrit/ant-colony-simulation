@@ -191,10 +191,93 @@ for cycle, seed in enumerate(seeds):
     visited_amounts.append(visited_area)
 
 
-# food_amount_amounts = np.array(food_amount_amounts)
-# ants_efficiency_efficiencies = np.array(ants_efficiency_efficiencies)
-# success_trip_rate_rate = np.array(success_trip_rate_rate)
+food_amount_tot = np.array(food_amount_amounts)
+ants_efficiency_tot = np.array(ants_efficiency_efficiencies)
+success_trip_rate_tot = np.array(success_trip_rate_rate)
+visited_amount_tot = np.array(visited_amounts)
 
-# TODO: calculate errors
+food_amount_std = np.std(food_amount_tot, axis=0)
+ants_efficiency_std = np.std(ants_efficiency_tot, axis=0)
+success_trip_rate_std = np.std(success_trip_rate_tot, axis=0)
+visited_amount_std = np.std(visited_amount_tot, axis=0)
 
-# TODO: plot results
+food_amount_avg = np.average(food_amount_tot, axis=0)
+ants_efficiency_avg = np.average(ants_efficiency_tot, axis=0)
+success_trip_rate_avg = np.average(success_trip_rate_tot, axis=0)
+visited_amount_avg = np.average(visited_amount_tot, axis=0)
+
+x = np.arange(config["frames"])  # x-axis points
+
+# Food Amount plot
+plt.figure(figsize=(8, 5))
+plt.plot(x, food_amount_avg, label="Food Amount Avg", color="blue")
+plt.fill_between(
+    x,
+    food_amount_avg - food_amount_std,
+    food_amount_avg + food_amount_std,
+    color="blue",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Food Amount")
+plt.xlabel("X-axis Label")  # Change as appropriate
+plt.ylabel("Food Amount")
+plt.legend()
+plt.savefig("images/food_amount.png")
+plt.close()
+
+# Ants Efficiency plot
+plt.figure(figsize=(8, 5))
+plt.plot(x, ants_efficiency_avg, label="Ants Efficiency Avg", color="green")
+plt.fill_between(
+    x,
+    ants_efficiency_avg - ants_efficiency_std,
+    ants_efficiency_avg + ants_efficiency_std,
+    color="green",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Ants Efficiency")
+plt.xlabel("X-axis Label")  # Change as appropriate
+plt.ylabel("Efficiency")
+plt.legend()
+plt.savefig("images/ants_efficiency.png")
+plt.close()
+
+# Success Trip Rate plot
+plt.figure(figsize=(8, 5))
+plt.plot(x[1:], success_trip_rate_avg, label="Success Trip Rate Avg", color="red")
+plt.fill_between(
+    x[1:],
+    success_trip_rate_avg - success_trip_rate_std,
+    success_trip_rate_avg + success_trip_rate_std,
+    color="red",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Success Trip Rate")
+plt.xlabel("X-axis Label")  # Change as appropriate
+plt.ylabel("Trip Rate")
+plt.legend()
+plt.savefig("images/success_trip_rate.png")
+plt.close()
+
+# Visited Amount plot
+plt.figure(figsize=(8, 5))
+plt.plot(x, visited_amount_avg, label="Visited Amount Avg", color="purple")
+plt.fill_between(
+    x,
+    visited_amount_avg - visited_amount_std,
+    visited_amount_avg + visited_amount_std,
+    color="purple",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Visited Amount")
+plt.xlabel("X-axis Label")  # Change as appropriate
+plt.ylabel("Visited Amount")
+plt.legend()
+plt.savefig("images/visited_amount.png")
+plt.close()
+
+print("Plots saved to the 'images/' folder.")
