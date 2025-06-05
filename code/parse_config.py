@@ -5,12 +5,17 @@ from typing import Any
 def parse_config(path: str) -> dict[str, Any]:
     with open(path, "r") as f:
         config = json.load(f)
+    if not config.get("enable_hunger", True):
+        ant_energy = 1000000000
+    else:
+        ant_energy = config.get("ant_energy", 100)
+
     return {
         "environment_path": config.get("environment_path", "environment.json"),
         "num_ants": config.get("num_ants", 10),
         "pheromone_decay": config.get("pheromone_decay", 0.05),
         "exploration_desire": config.get("exploration_desire", 0.1),
-        "ant_energy": config.get("ant_energy", 100),
+        "ant_energy": ant_energy,
         "ant_carry_amount": config.get("ant_carry_amount", 130),
         "colony_start_amount": config.get("colony_start_amount", 1000),
         "observables": config.get("observables", []),

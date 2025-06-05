@@ -53,7 +53,8 @@ for cycle, seed in enumerate(seeds):
         environment.add_food(tuple(food))
     for obstacle in data["obstacles"]:
         environment.add_obstacle(tuple(obstacle))
-    environment.pheromone_decay = config["pheromone_decay"]
+
+    environment.real_shortest_paths = environment.compute_shortest_paths()
 
     random.seed(seed)
     np.random.seed(seed)
@@ -73,6 +74,7 @@ for cycle, seed in enumerate(seeds):
     visited_area = []
     ants_efficiency = []
     success_trip_rate = []
+    avg_food_trip_length = []
     total_energy_consumed = 0
 
     output_path = f"images/{cycle}/ant_animation.mp4"
@@ -88,6 +90,7 @@ for cycle, seed in enumerate(seeds):
 
             total_successful_trips = 0
             total_completed_trips = 0
+            sum_latest_food_trip_length = 0
             if frame == 0:
                 plots.draw_world(ax, environment, ant_list, step_number=0)
             else:
@@ -98,6 +101,8 @@ for cycle, seed in enumerate(seeds):
                         total_energy_consumed += 1
                     total_successful_trips += ant.success_trip
                     total_completed_trips += ant.completed_trip
+                    sum_latest_food_trip_length += ant.last_food_trip_length
+                avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
 
                 if extension == "elitist":
                     environment.reinforce_best_path()
@@ -129,12 +134,14 @@ for cycle, seed in enumerate(seeds):
 
         # Save video
         ani.save(output_path, writer="ffmpeg")
+
     else:
         for step in range(config["frames"]):
             food_amounts.append(environment.colony_food)
 
             total_successful_trips = 0
             total_completed_trips = 0
+            sum_latest_food_trip_length = 0
             environment.evaporate_pheromones()
             for ant in ant_list:
                 ant.next_step(step)
@@ -142,6 +149,8 @@ for cycle, seed in enumerate(seeds):
                     total_energy_consumed += 1
                 total_successful_trips += ant.success_trip
                 total_completed_trips += ant.completed_trip
+                sum_latest_food_trip_length += ant.last_food_trip_length
+            avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
 
             if extension == "elitist":
                 environment.reinforce_best_path()
@@ -188,6 +197,21 @@ for cycle, seed in enumerate(seeds):
 
     if "area_explored_per_time" in config["observables"]:
         plots.visited_area(visited_area, cycle)
+
+    for i, path in enumerate(environment.real_shortest_paths):
+        print(f"Real Shortest Path Length to Food: {len(path) - 1}")
+
+    if "shortest_path_length" in config["observables"]:
+        print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
+
+    if "ant_trip_success_rate" in config["observables"]:
+        plots.ant_trip_success_rate(success_trip_rate)
+
+    if "average_steps_per_ant" in config["observables"]:
+        plots.average_steps_per_ant(avg_food_trip_length)
+
+    if "plot_paths" in config["observables"]:
+        plots.plot_paths_on_grid(environment, all_successful_paths)
 
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)

@@ -1,8 +1,10 @@
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import numpy as np
-
-from . import grid
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
+from matplotlib.colors import Normalize, ListedColormap
+import matplotlib.cm as cm
 
 
 def draw_world(ax, grid, ants, step_number):
@@ -201,3 +203,142 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.title("Rate of Successful Trips Over Time")
     fig.savefig(f"images/{cycle}/success_trips.png")
     plt.close()
+
+
+def average_steps_per_ant(average_steps_per_ant):
+    stps = np.arange(len(average_steps_per_ant))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        average_steps_per_ant[1:],
+        label="average food trip length per ant",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Length of Latest Successful Trips / Total Ants")
+    plt.title("Average Length of Successful Trips Over Time")
+    fig.savefig("images/average_length_of_food_trips.png")
+
+
+def plot_paths_on_grid(environment, all_successful_paths):
+    # --- Compute visitation heatmap ---
+    visit_counts = np.zeros((environment.size, environment.size), dtype=int)
+    for ant_paths in all_successful_paths:
+        for path in ant_paths:
+            for x, y in path:
+                visit_counts[x, y] += 1
+
+    max_count = np.max(visit_counts)
+    norm = Normalize(vmin=0, vmax=max_count if max_count > 0 else 1)
+
+    # --- Transparent light yellow colormap ---
+    light_yellow_cmap = cm.get_cmap("Wistia", 256)
+    colors = light_yellow_cmap(np.linspace(0, 1, 256))
+    colors[:, -1] = np.linspace(0, 0.4, 256)  # transparency from 0 to 0.4
+    transparent_yellow_cmap = ListedColormap(colors)
+
+    # --- Plotting setup ---
+    _, ax = plt.subplots(figsize=(6, 7))
+    ax.set_xlim(0, environment.size)
+    ax.set_ylim(0, environment.size)
+    ax.set_xticks(range(environment.size + 1))
+    ax.set_yticks(range(environment.size + 1))
+    ax.set_aspect("equal")
+    ax.grid(color="gray", alpha=0.3)
+
+    # --- Draw environment grid with visit shading ---
+    for x in range(environment.size):
+        for y in range(environment.size):
+            val = environment.grid[x, y]
+
+            visit_value = (
+                transparent_yellow_cmap(norm(visit_counts[x, y]))
+                if visit_counts[x, y] > 0
+                else "white"
+            )
+
+            if val == 1:
+                face_color = "red"  # Colony
+            elif val == 2:
+                face_color = "green"  # Food
+            elif val == 3:
+                face_color = "black"  # Obstacle
+            else:
+                face_color = visit_value
+
+            rect = patches.Rectangle(
+                (x, y), 1, 1, facecolor=face_color, edgecolor="black"
+            )
+            ax.add_patch(rect)
+
+    # --- Plot real shortest paths in blue ---
+    real_length = None
+    for i, path in enumerate(environment.real_shortest_paths):
+        if not path:
+            continue
+        real_length = len(path) - 1
+        for (x1, y1), (x2, y2) in zip(path, path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="blue",
+                alpha=0.8,
+            )
+
+    # --- Plot ant's best path in red ---
+    ant_best_path = environment.best_path
+    ant_length = None
+    if ant_best_path:
+        ant_length = len(ant_best_path) - 1
+        for (x1, y1), (x2, y2) in zip(ant_best_path, ant_best_path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="red",
+                alpha=0.8,
+            )
+        x0, y0 = ant_best_path[-1]
+        ax.text(x0 + 0.5, y0 + 0.5, f"{i}", color="red", ha="center", va="center")
+
+    # --- Add bottom legend ---
+    legend_elements = []
+
+    if real_length is not None:
+        legend_elements.append(
+            Line2D(
+                [0], [0], color="blue", lw=2, label=f"Shortest Path (L={real_length})"
+            )
+        )
+    if ant_length is not None:
+        legend_elements.append(
+            Line2D([0], [0], color="red", lw=2, label=f"Ant Path (L={ant_length})")
+        )
+
+    legend_elements.append(
+        Patch(
+            facecolor=cm.Wistia(0.7),
+            edgecolor="black",
+            label="Visit Frequency for Successful Trips",
+        )
+    )
+
+    ax.legend(
+        handles=legend_elements,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.1),
+        ncol=2,
+        frameon=False,
+        fontsize=10,
+    )
+
+    plt.title("Paths from Colony to Food")
+    plt.tight_layout(rect=[0, 0.05, 1, 1])
+    plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")

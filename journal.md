@@ -105,12 +105,69 @@ Setup world GUI:
 (due 3 June 2025, 11:00)
 
 ### Planning
-@mankritsingh will do literature review on observables and add code to compare them with existing papers, along with error estimation. Also, he will add a feature to allow different ants to have different pheromone preference in the random walk (so some are explorers, others are followers)
+@mankritsingh will do literature review on observables and add code for some of them.
 
-@npaarts will work on making food finite / replenishable, add births / deaths and track ant population. Also, implement hunger so that ants don't wander too much without food.
+@npaarts will work on implementing hunger so that ants don't wander too much without food, work on performance and error metrics.
 
 @rjuyal will work on adding extensions to the simulation / explore Reinforcement Learning based ants / Machine Learning approaches.
 
+### Progress Report 
+
+@mankritsingh
+
+- First, I searched for observables for ant colony simulation across literature
+- Then I added several observables and made key changes in !11
+- Also reviewed some Merge Requests
+
+The tracked observables look like this: 
+
+![](./journal/week3/ant_efficiency.png)
+
+![](./journal/week3/success_trips.png)
+
+![](./journal/week3/colony_food.png)
+
+@rjuyal
+
+This week I worked on adding different extensions(see !12). I first worked on creating different mode, i.e., constraints on the ants movement.
+The ones implemented are 
+- no_backtracking: ants cannot go immediately backward unless no other choice 
+- self_avoiding: ants cannot cross their own path. if no chocie will return to colony 
+- yes_backtracking: no constraint. 
+
+I have also added the elitist extension where the pheromones on the current best path gets reinforced at each timestep.
+I also explored adding machine learning(specifically reinforcement learning) for the ants' movement. While not currently in the codebase since I am varying hyperparameters, I have included
+the animation generated with the current version here. I also reviewed merge requests.
+
+No backtracking:
+
+![](./journal/week3/ant_simulation_noback.mp4)
+
+Yes backtracking:
+
+![](./journal/week3/ant_simulation_yesback.mp4)
+
+Self avoiding:
+
+![](./journal/week3/ant_simulation_selfavoid.mp4)
+
+Self avoiding with elitist extension:
+
+![](./journal/week3/ant_simulation_selfavoidelite.mp4)
+
+Reinforcement Learning(unfinished):
+
+![](./journal/week3/ant_simulation_rl.mp4)
+
+@npaarts
+
+I worked on adding hunger to the ants and the possibility for them to die if the colony had no food and their
+stomach was empty.
+After that I started working on automatically doing multiple cycles of simulations to generate uncorrrelated
+samples for calculating the errorbars,
+for performance we thought it was very bad, but it ended up being the animation. Keeping the animation behind
+a config option meant that if we turned it off a cycle (12 ants for 1000 steps) took only ~50 ms instead
+of ~30 seconds which makes it viable to generate large enough samples to get good statistics on the observables.
 
 ## Reminder final deadline
 
