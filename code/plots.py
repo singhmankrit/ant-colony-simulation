@@ -205,7 +205,7 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.close()
 
 
-def average_steps_per_ant(average_steps_per_ant):
+def average_steps_per_ant(average_steps_per_ant, cycle):
     stps = np.arange(len(average_steps_per_ant))
     fig = plt.figure()
     plt.plot(
@@ -217,10 +217,11 @@ def average_steps_per_ant(average_steps_per_ant):
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
     plt.title("Average Length of Successful Trips Over Time")
-    fig.savefig("images/average_length_of_food_trips.png")
+    fig.savefig(f"images/{cycle}/average_length_of_food_trips.png")
+    plt.close()
 
 
-def plot_paths_on_grid(environment, all_successful_paths):
+def plot_paths_on_grid(environment, all_successful_paths, cycle):
     # --- Compute visitation heatmap ---
     visit_counts = np.zeros((environment.size, environment.size), dtype=int)
     for ant_paths in all_successful_paths:
@@ -341,4 +342,5 @@ def plot_paths_on_grid(environment, all_successful_paths):
 
     plt.title("Paths from Colony to Food")
     plt.tight_layout(rect=[0, 0.05, 1, 1])
-    plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"images/{cycle}/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.close()

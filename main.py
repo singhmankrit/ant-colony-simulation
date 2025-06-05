@@ -5,6 +5,7 @@ import os
 import json
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from numpy.typing import NDArray
 
 import code.grid as grid
 import code.ants as ants
@@ -205,13 +206,13 @@ for cycle, seed in enumerate(seeds):
         print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
 
     if "ant_trip_success_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate)
+        plots.ant_trip_success_rate(success_trip_rate, cycle)
 
     if "average_steps_per_ant" in config["observables"]:
-        plots.average_steps_per_ant(avg_food_trip_length)
+        plots.average_steps_per_ant(avg_food_trip_length, cycle)
 
     if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths)
+        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
 
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
