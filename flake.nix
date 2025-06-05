@@ -45,6 +45,7 @@
                 # for profiling and testing
                 pyflame
                 ppkgs.pytest
+                ppkgs.networkx
               ]))
               ffmpeg-headless # needed to make the animations
               mpv # for watching the generated videos

@@ -55,6 +55,8 @@ class Ant:
             # the ant is attempting to gather food
             self.explore_grid()
 
+        self.grid.visited[self.pos] |= True
+
         if not self.has_food and self.pos in self.grid.food_positions:
             self.has_food = True
             self.food_path = self.path_memory[:]

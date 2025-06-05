@@ -141,56 +141,7 @@ def draw_world(ax, grid, ants, step_number):
     )
 
 
-def hist_distances(grid, steps):
-    gathered = np.array([y for x, y in grid.food_gathered_instances])
-    back = np.array([y for x, y in grid.food_at_nest_instances])
-
-    cum_gathered = np.zeros(steps)
-    cum_back = np.zeros(steps)
-    stps = np.arange(steps)
-
-    for step in gathered:
-        cum_gathered[step:] += 1
-
-    for step in back:
-        cum_back[step:] += 1
-
-    fig = plt.figure()
-    plt.plot(
-        stps,
-        cum_gathered,
-        label="total gathered food",
-    )
-    plt.plot(
-        stps,
-        cum_back,
-        label="food brought to the colony",
-    )
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("gathered food")
-    plt.title("Total food gathered")
-    fig.savefig("images/total_gathered_food.png")
-
-    fig = plt.figure()
-    plt.plot(
-        stps[1:],
-        cum_gathered[1:] / stps[1:],
-        label="gathered food/step",
-    )
-    plt.plot(
-        stps[1:],
-        cum_back[1:] / stps[1:],
-        label="food brought to the colony/step",
-    )
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("gathered food / step")
-    plt.title("Average food gathered per step")
-    fig.savefig("images/average_gathered_food.png")
-
-
-def colony_food(food_gathered):
+def colony_food(food_gathered, cycle):
     stps = np.arange(len(food_gathered))
     fig = plt.figure()
     plt.plot(
@@ -202,10 +153,11 @@ def colony_food(food_gathered):
     plt.xlabel("Step")
     plt.ylabel("Food at Colony")
     plt.title("Food Available at Colony Over Time")
-    fig.savefig("images/colony_food.png")
+    fig.savefig(f"images/{cycle}/colony_food.png")
+    plt.close()
 
 
-def ant_efficiency(ants_efficiency):
+def ant_efficiency(ants_efficiency, cycle):
     stps = np.arange(len(ants_efficiency))
     fig = plt.figure()
     plt.plot(
@@ -217,10 +169,27 @@ def ant_efficiency(ants_efficiency):
     plt.xlabel("Step")
     plt.ylabel("Collected Food / Consumed Energy")
     plt.title("Total Ant Efficiency Over Time")
-    fig.savefig("images/ant_efficiency.png")
+    fig.savefig(f"images/{cycle}/ant_efficiency.png")
+    plt.close()
 
 
-def ant_trip_success_rate(success_trip_rate):
+def visited_area(areas, cycle):
+    stps = np.arange(len(areas))
+    fig = plt.figure()
+    plt.plot(
+        stps,
+        areas,
+        label="visited area",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Visited Area")
+    plt.title("Area explored by the colony")
+    fig.savefig(f"images/{cycle}/visited_area.png")
+    plt.close()
+
+
+def ant_trip_success_rate(success_trip_rate, cycle):
     stps = np.arange(len(success_trip_rate))
     fig = plt.figure()
     plt.plot(
@@ -232,10 +201,11 @@ def ant_trip_success_rate(success_trip_rate):
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
     plt.title("Rate of Successful Trips Over Time")
-    fig.savefig("images/success_trips.png")
+    fig.savefig(f"images/{cycle}/success_trips.png")
+    plt.close()
 
 
-def average_steps_per_ant(average_steps_per_ant):
+def average_steps_per_ant(average_steps_per_ant, cycle):
     stps = np.arange(len(average_steps_per_ant))
     fig = plt.figure()
     plt.plot(
@@ -247,10 +217,11 @@ def average_steps_per_ant(average_steps_per_ant):
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
     plt.title("Average Length of Successful Trips Over Time")
-    fig.savefig("images/average_length_of_food_trips.png")
+    fig.savefig(f"images/{cycle}/average_length_of_food_trips.png")
+    plt.close()
 
 
-def plot_paths_on_grid(environment, all_successful_paths):
+def plot_paths_on_grid(environment, all_successful_paths, cycle):
     # --- Compute visitation heatmap ---
     visit_counts = np.zeros((environment.size, environment.size), dtype=int)
     for ant_paths in all_successful_paths:
@@ -371,4 +342,5 @@ def plot_paths_on_grid(environment, all_successful_paths):
 
     plt.title("Paths from Colony to Food")
     plt.tight_layout(rect=[0, 0.05, 1, 1])
-    plt.savefig("images/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"images/{cycle}/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.close()
