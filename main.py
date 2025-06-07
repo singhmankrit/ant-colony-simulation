@@ -77,6 +77,8 @@ for cycle, seed in enumerate(seeds):
     success_trip_rate = []
     avg_food_trip_length = []
     total_energy_consumed = 0
+    avg_food_trip_length = []
+    all_successful_paths = []
 
     output_path = f"images/{cycle}/ant_animation.mp4"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -127,6 +129,9 @@ for cycle, seed in enumerate(seeds):
                     success_trip_rate.append(
                         total_successful_trips / total_completed_trips
                     )
+                    
+            for ant in ant_list:
+                all_successful_paths.append(ant.all_successful_paths)
 
         # Animate
         ani = animation.FuncAnimation(
@@ -191,7 +196,7 @@ for cycle, seed in enumerate(seeds):
         print("Time to Shortest Path:", environment.best_path_found_step)
 
     if "shortest_path_length" in config["observables"]:
-        print("Shortest Path Length:", environment.best_path_length)
+        print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
 
     if "ant_trip_success_rate" in config["observables"]:
         plots.ant_trip_success_rate(success_trip_rate, cycle)
@@ -199,20 +204,14 @@ for cycle, seed in enumerate(seeds):
     if "area_explored_per_time" in config["observables"]:
         plots.visited_area(visited_area, cycle)
 
-    for i, path in enumerate(environment.real_shortest_paths):
-        print(f"Real Shortest Path Length to Food: {len(path) - 1}")
-
-    if "shortest_path_length" in config["observables"]:
-        print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
-
-    if "ant_trip_success_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate, cycle)
-
     if "average_steps_per_ant" in config["observables"]:
         plots.average_steps_per_ant(avg_food_trip_length, cycle)
 
     if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+        plots.plot_paths_on_grid(environment, all_successful_paths, cycle) 
+
+    for i, path in enumerate(environment.real_shortest_paths):
+        print(f"Real Shortest Path Length to Food: {len(path) - 1}")
 
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
