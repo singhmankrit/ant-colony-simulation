@@ -249,7 +249,7 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Food Available at Colony: Multiple Cycles")
+plt.title("Food Available at Colony: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Food at Colony")
 plt.legend()
@@ -267,7 +267,7 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Ant Efficiency: Multiple Cycles")
+plt.title("Ant Efficiency: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Collected Food / Consumed Energy")
 plt.legend()
@@ -285,7 +285,7 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Rate of Successful Trips: Multiple Cycles")
+plt.title("Rate of Successful Trips: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Successful Trips / Total Completed Trips")
 plt.legend()
@@ -303,7 +303,7 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Area explored by the colony: Multiple Cycles")
+plt.title("Area explored by the colony: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Visited Area")
 plt.legend()
