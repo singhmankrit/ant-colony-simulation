@@ -279,17 +279,31 @@ population_avg = np.average(population_tot, axis=0)
 avg_food_trip_avg = np.average(avg_food_trip_tot, axis=0)
 
 # Standard Deviations
-food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg)
-ants_efficiency_std = np.std(ants_efficiency_tot, axis=0, mean=ants_efficiency_avg)
+food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg) / np.sqrt(
+    cycles
+)
+ants_efficiency_std = np.std(
+    ants_efficiency_tot, axis=0, mean=ants_efficiency_avg
+) / np.sqrt(cycles)
 success_trip_rate_std = np.std(
     success_trip_rate_tot, axis=0, mean=success_trip_rate_avg
+) / np.sqrt(cycles)
+visited_amount_std = np.std(
+    visited_amount_tot, axis=0, mean=visited_amount_avg
+) / np.sqrt(cycles)
+time_to_first_path_std = np.std(
+    time_to_first_path_tot, mean=time_to_first_path_avg
+) / np.sqrt(cycles)
+time_to_shortest_std = np.std(
+    time_to_shortest_tot, mean=time_to_shortest_avg
+) / np.sqrt(cycles)
+shortest_ant_path_std = np.std(
+    shortest_ant_path_tot, mean=shortest_ant_path_avg
+) / np.sqrt(cycles)
+population_std = np.std(population_tot, axis=0, mean=population_avg) / np.sqrt(cycles)
+avg_food_trip_std = np.std(avg_food_trip_tot, axis=0, mean=avg_food_trip_avg) / np.sqrt(
+    cycles
 )
-visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
-time_to_first_path_std = np.std(time_to_first_path_tot, mean=time_to_first_path_avg)
-time_to_shortest_std = np.std(time_to_shortest_tot, mean=time_to_shortest_avg)
-shortest_ant_path_std = np.std(shortest_ant_path_tot, mean=shortest_ant_path_avg)
-population_std = np.std(population_tot, axis=0, mean=population_avg)
-avg_food_trip_std = np.std(avg_food_trip_tot, axis=0, mean=avg_food_trip_avg)
 
 print(
     f"Average Time to First Path: {time_to_first_path_avg} +/- {round(time_to_first_path_std, 2)}"
