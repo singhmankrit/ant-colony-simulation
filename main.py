@@ -39,6 +39,9 @@ food_amount_amounts = []
 ants_efficiency_efficiencies = []
 success_trip_rate_rate = []
 visited_amounts = []
+time_to_firsts = []
+time_to_shortests = []
+shortest_ant_paths = []
 
 seeds = [random.randint(1, 10000) for _ in range(cycles)]
 for cycle, seed in enumerate(seeds):
@@ -224,6 +227,9 @@ for cycle, seed in enumerate(seeds):
     ants_efficiency_efficiencies.append(ants_efficiency)
     success_trip_rate_rate.append(success_trip_rate)
     visited_amounts.append(visited_area)
+    time_to_firsts.append(time_to_first_path)
+    time_to_shortests.append(environment.best_path_found_step)
+    shortest_ant_paths.append(environment.best_path_length - 1)
 
 for i, path in enumerate(environment.real_shortest_paths):
     print(f"Real Shortest Path Length to Food: {len(path) - 1}")
@@ -232,11 +238,17 @@ food_amount_tot = np.array(food_amount_amounts)
 ants_efficiency_tot = np.array(ants_efficiency_efficiencies)
 success_trip_rate_tot = np.array(success_trip_rate_rate)
 visited_amount_tot = np.array(visited_amounts)
+time_to_first_path_tot = np.array(time_to_firsts)
+time_to_shortest_tot = np.array(time_to_shortests)
+shortest_ant_path_tot = np.array(shortest_ant_paths)
 
 food_amount_avg = np.average(food_amount_tot, axis=0)
 ants_efficiency_avg = np.average(ants_efficiency_tot, axis=0)
 success_trip_rate_avg = np.average(success_trip_rate_tot, axis=0)
 visited_amount_avg = np.average(visited_amount_tot, axis=0)
+time_to_first_path_avg = np.average(time_to_first_path_tot)
+time_to_shortest_avg = np.average(time_to_shortest_tot)
+shortest_ant_path_avg = np.average(shortest_ant_path_tot)
 
 food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg)
 ants_efficiency_std = np.std(ants_efficiency_tot, axis=0, mean=ants_efficiency_avg)
@@ -244,6 +256,20 @@ success_trip_rate_std = np.std(
     success_trip_rate_tot, axis=0, mean=success_trip_rate_avg
 )
 visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
+time_to_first_path_std = np.std(time_to_first_path_tot, mean=time_to_first_path_avg)
+time_to_shortest_std = np.std(time_to_shortest_tot, mean=time_to_shortest_avg)
+shortest_ant_path_std = np.std(shortest_ant_path_tot, mean=shortest_ant_path_avg)
+
+print(
+    f"Average Time to First Path: {time_to_first_path_avg} +/- {round(time_to_first_path_std, 2)}"
+)
+print(
+    f"Average Time to Shortest Path: {time_to_shortest_avg} +/- {round(time_to_shortest_std, 2)}"
+)
+print(
+    f"Average Shortest Path Length found by Ants: {shortest_ant_path_avg} +/- {round(shortest_ant_path_std, 2)}"
+)
+print("=========================")
 
 x = np.arange(config["frames"])  # x-axis points
 
