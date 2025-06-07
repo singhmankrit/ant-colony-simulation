@@ -211,7 +211,7 @@ def average_steps_per_ant(average_steps_per_ant, cycle):
     plt.plot(
         stps[1:],
         average_steps_per_ant[1:],
-        label="average food trip length per ant",
+        label="Average Food Trip Length per Ant",
     )
     plt.legend()
     plt.xlabel("Step")
@@ -344,3 +344,20 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
     plt.tight_layout(rect=[0, 0.05, 1, 1])
     plt.savefig(f"images/{cycle}/plot_paths.png", dpi=300, bbox_inches="tight")
     plt.close()
+
+
+def plot_population(ant_population, cycle):
+    stps = np.arange(len(ant_population))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        ant_population[1:],
+        label="Ant Population",
+    )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Number of Ants Alive")
+    plt.title(f"Ant Population: Cycle #{cycle}")
+    fig.savefig(f"images/{cycle}/population.png")
+    plt.close()
+

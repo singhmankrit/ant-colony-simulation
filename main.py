@@ -82,6 +82,8 @@ for cycle, seed in enumerate(seeds):
     total_energy_consumed = 0
     avg_food_trip_length = []
     all_successful_paths = []
+    ant_population = []
+    ants_dead_at_step = -1
 
     output_path = f"images/{cycle}/ant_animation.mp4"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -154,14 +156,19 @@ for cycle, seed in enumerate(seeds):
             total_completed_trips = 0
             sum_latest_food_trip_length = 0
             environment.evaporate_pheromones()
+            ants_alive = 0
             for ant in ant_list:
                 ant.next_step(step)
                 if not ant.dead:
+                    ants_alive += 1
                     total_energy_consumed += 1
                 total_successful_trips += ant.success_trip
                 total_completed_trips += ant.completed_trip
                 sum_latest_food_trip_length += ant.last_food_trip_length
             avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
+            if ants_dead_at_step < 0 and ants_alive == 0:
+                ants_dead_at_step = step
+            ant_population.append(ants_alive)
 
             if extension == "elitist":
                 environment.reinforce_best_path()
@@ -188,6 +195,7 @@ for cycle, seed in enumerate(seeds):
             all_successful_paths.append(ant.all_successful_paths)
 
     # Plotted Output
+    # ants_dead_at_step
     if "colony_food" in config["observables"]:
         plots.colony_food(food_amounts, cycle)
 
@@ -205,6 +213,9 @@ for cycle, seed in enumerate(seeds):
 
     if "plot_paths" in config["observables"]:
         plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+
+    if "population" in config["observables"]:
+        plots.plot_population(ant_population, cycle)
 
     # Printed Output
     print(f"Cycle: {cycle}")
