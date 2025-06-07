@@ -141,7 +141,7 @@ def draw_world(ax, grid, ants, step_number):
     )
 
 
-def colony_food(food_gathered, cycle):
+def colony_food(food_gathered, cycle, ants_dead_at_step):
     stps = np.arange(len(food_gathered))
     fig = plt.figure()
     plt.plot(
@@ -149,6 +149,12 @@ def colony_food(food_gathered, cycle):
         food_gathered[1:],
         label="Colony Food",
     )
+
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Food at Colony")
@@ -157,7 +163,7 @@ def colony_food(food_gathered, cycle):
     plt.close()
 
 
-def ant_efficiency(ants_efficiency, cycle):
+def ant_efficiency(ants_efficiency, cycle, ants_dead_at_step):
     stps = np.arange(len(ants_efficiency))
     fig = plt.figure()
     plt.plot(
@@ -165,6 +171,12 @@ def ant_efficiency(ants_efficiency, cycle):
         ants_efficiency[1:],
         label="Ant Efficiency",
     )
+
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Collected Food / Consumed Energy")
@@ -173,7 +185,7 @@ def ant_efficiency(ants_efficiency, cycle):
     plt.close()
 
 
-def visited_area(areas, cycle):
+def visited_area(areas, cycle, ants_dead_at_step):
     stps = np.arange(len(areas))
     fig = plt.figure()
     plt.plot(
@@ -181,6 +193,12 @@ def visited_area(areas, cycle):
         areas,
         label="Visited Area",
     )
+
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Visited Area")
@@ -189,7 +207,7 @@ def visited_area(areas, cycle):
     plt.close()
 
 
-def ant_trip_success_rate(success_trip_rate, cycle):
+def ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step):
     stps = np.arange(len(success_trip_rate))
     fig = plt.figure()
     plt.plot(
@@ -197,6 +215,12 @@ def ant_trip_success_rate(success_trip_rate, cycle):
         success_trip_rate[1:],
         label="Success Trip Rate",
     )
+
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
@@ -205,7 +229,7 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.close()
 
 
-def average_steps_per_ant(average_steps_per_ant, cycle):
+def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     stps = np.arange(len(average_steps_per_ant))
     fig = plt.figure()
     plt.plot(
@@ -213,6 +237,12 @@ def average_steps_per_ant(average_steps_per_ant, cycle):
         average_steps_per_ant[1:],
         label="Average Food Trip Length per Ant",
     )
+
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
@@ -346,7 +376,7 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
     plt.close()
 
 
-def plot_population(ant_population, cycle):
+def plot_population(ant_population, cycle, ants_dead_at_step):
     stps = np.arange(len(ant_population))
     fig = plt.figure()
     plt.plot(
@@ -354,10 +384,13 @@ def plot_population(ant_population, cycle):
         ant_population[1:],
         label="Ant Population",
     )
+    if ants_dead_at_step is not None:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Number of Ants Alive")
     plt.title(f"Ant Population: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/population.png")
     plt.close()
-
