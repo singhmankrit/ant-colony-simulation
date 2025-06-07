@@ -150,7 +150,7 @@ def colony_food(food_gathered, cycle, ants_dead_at_step):
         label="Colony Food",
     )
 
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
@@ -172,7 +172,7 @@ def ant_efficiency(ants_efficiency, cycle, ants_dead_at_step):
         label="Ant Efficiency",
     )
 
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
@@ -194,7 +194,7 @@ def visited_area(areas, cycle, ants_dead_at_step):
         label="Visited Area",
     )
 
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
@@ -216,7 +216,7 @@ def ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step):
         label="Success Trip Rate",
     )
 
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
@@ -238,7 +238,7 @@ def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
         label="Average Food Trip Length per Ant",
     )
 
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
@@ -384,7 +384,7 @@ def plot_population(ant_population, cycle, ants_dead_at_step):
         ant_population[1:],
         label="Ant Population",
     )
-    if ants_dead_at_step is not None:
+    if ants_dead_at_step > 0:
         plt.axvline(
             x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
         )
