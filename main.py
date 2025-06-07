@@ -129,7 +129,7 @@ for cycle, seed in enumerate(seeds):
                     success_trip_rate.append(
                         total_successful_trips / total_completed_trips
                     )
-                    
+
             for ant in ant_list:
                 all_successful_paths.append(ant.all_successful_paths)
 
@@ -208,7 +208,7 @@ for cycle, seed in enumerate(seeds):
         plots.average_steps_per_ant(avg_food_trip_length, cycle)
 
     if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths, cycle) 
+        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
 
     for i, path in enumerate(environment.real_shortest_paths):
         print(f"Real Shortest Path Length to Food: {len(path) - 1}")
@@ -238,9 +238,9 @@ visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
 
 x = np.arange(config["frames"])  # x-axis points
 
-# Food Amount plot
+# Colony Food plot
 plt.figure(figsize=(8, 5))
-plt.plot(x, food_amount_avg, label="Food Amount Avg", color="blue")
+plt.plot(x, food_amount_avg, label="Colony Food Avg", color="blue")
 plt.fill_between(
     x,
     food_amount_avg - food_amount_std,
@@ -249,16 +249,16 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Food Amount")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Food Amount")
+plt.title("Food Available at Colony: Multiple Cycles")
+plt.xlabel("Step")
+plt.ylabel("Food at Colony")
 plt.legend()
-plt.savefig("images/food_amount.png")
+plt.savefig("images/global_colony_food.png")
 plt.close()
 
-# Ants Efficiency plot
+# Ant Efficiency plot
 plt.figure(figsize=(8, 5))
-plt.plot(x, ants_efficiency_avg, label="Ants Efficiency Avg", color="green")
+plt.plot(x, ants_efficiency_avg, label="Ant Efficiency Avg", color="green")
 plt.fill_between(
     x,
     ants_efficiency_avg - ants_efficiency_std,
@@ -267,11 +267,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Ants Efficiency")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Efficiency")
+plt.title("Ant Efficiency: Multiple Cycles")
+plt.xlabel("Step")
+plt.ylabel("Collected Food / Consumed Energy")
 plt.legend()
-plt.savefig("images/ants_efficiency.png")
+plt.savefig("images/global_ant_efficiency.png")
 plt.close()
 
 # Success Trip Rate plot
@@ -285,11 +285,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Success Trip Rate")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Trip Rate")
+plt.title("Rate of Successful Trips: Multiple Cycles")
+plt.xlabel("Step")
+plt.ylabel("Successful Trips / Total Completed Trips")
 plt.legend()
-plt.savefig("images/success_trip_rate.png")
+plt.savefig("images/global_success_trips.png")
 plt.close()
 
 # Visited Amount plot
@@ -303,11 +303,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Visited Amount")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Visited Amount")
+plt.title("Area explored by the colony: Multiple Cycles")
+plt.xlabel("Step")
+plt.ylabel("Visited Area")
 plt.legend()
-plt.savefig("images/visited_amount.png")
+plt.savefig("images/global_visited_area.png")
 plt.close()
 
 print("Plots saved to the 'images/' folder.")
