@@ -130,8 +130,8 @@ for cycle, seed in enumerate(seeds):
                         total_successful_trips / total_completed_trips
                     )
 
-            for ant in ant_list:
-                all_successful_paths.append(ant.all_successful_paths)
+        for ant in ant_list:
+            all_successful_paths.append(ant.all_successful_paths)
 
         # Animate
         ani = animation.FuncAnimation(
@@ -178,6 +178,9 @@ for cycle, seed in enumerate(seeds):
                     )
 
             visited_area.append(np.count_nonzero(environment.visited))
+
+        for ant in ant_list:
+            all_successful_paths.append(ant.all_successful_paths)
 
     # Plotted Output
     if "colony_food" in config["observables"]:
