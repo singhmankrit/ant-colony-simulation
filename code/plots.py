@@ -231,7 +231,7 @@ def ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step):
 
 def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     stps = np.arange(len(average_steps_per_ant))
-    error_std = bootstrap_error(average_steps_per_ant[1:], 10000)
+    error_std = bootstrap_error(average_steps_per_ant[1:])
 
     fig = plt.figure()
     plt.plot(
@@ -262,7 +262,7 @@ def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     plt.close()
 
 
-def bootstrap_error(lengths, B=1000):
+def bootstrap_error(lengths, B=10000):
     n = len(lengths)
     boot_means = []
     for _ in range(B):
