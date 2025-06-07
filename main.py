@@ -115,7 +115,8 @@ for cycle, seed in enumerate(seeds):
                         ants_alive += 1
                     total_successful_trips += ant.success_trip
                     total_completed_trips += ant.completed_trip
-                    sum_latest_food_trip_length += ant.last_food_trip_length
+                    if ant.last_food_trip_length > 0:
+                        sum_latest_food_trip_length += ant.last_food_trip_length
                 avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
                 if ants_dead_at_step < 0 and ants_alive == 0:
                     ants_dead_at_step = step
@@ -171,7 +172,8 @@ for cycle, seed in enumerate(seeds):
                     total_energy_consumed += 1
                 total_successful_trips += ant.success_trip
                 total_completed_trips += ant.completed_trip
-                sum_latest_food_trip_length += ant.last_food_trip_length
+                if ant.last_food_trip_length > 0:
+                    sum_latest_food_trip_length += ant.last_food_trip_length
             avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
             if ants_dead_at_step < 0 and ants_alive == 0:
                 ants_dead_at_step = step
