@@ -9,13 +9,13 @@
   "colony_start_amount": 2500,
   "observables": [
     "colony_food",
-    "total_ants_efficiency",
+    "ant_efficiency",
     "time_to_first_path",
     "time_to_shortest_path",
-    "shortest_path_length",
-    "ant_trip_success_rate",
-    "area_explored_per_time",
-    "average_steps_per_ant",
+    "ant_shortest_path_len",
+    "success_trips_rate",
+    "visited_area",
+    "avg_latest_success_trip",
     "plot_paths"
   ],
   "seed": 42,

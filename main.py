@@ -114,7 +114,7 @@ for cycle, seed in enumerate(seeds):
 
                 plots.draw_world(ax, environment, ant_list, frame)
 
-            if "total_ants_efficiency" in config["observables"]:
+            if "ant_efficiency" in config["observables"]:
                 total_collected = (
                     len(environment.food_at_nest_instances) * config["ant_carry_amount"]
                 )
@@ -122,7 +122,7 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if "ant_trip_success_rate" in config["observables"]:
+            if "success_trips_rate" in config["observables"]:
                 if total_completed_trips == 0:
                     success_trip_rate.append(np.nan)
                 else:
@@ -161,7 +161,7 @@ for cycle, seed in enumerate(seeds):
             if extension == "elitist":
                 environment.reinforce_best_path()
 
-            if "total_ants_efficiency" in config["observables"]:
+            if "ant_efficiency" in config["observables"]:
                 total_collected = (
                     len(environment.food_at_nest_instances) * config["ant_carry_amount"]
                 )
@@ -169,7 +169,7 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if "ant_trip_success_rate" in config["observables"]:
+            if "success_trips_rate" in config["observables"]:
                 if total_completed_trips == 0:
                     success_trip_rate.append(np.nan)
                 else:
@@ -179,12 +179,26 @@ for cycle, seed in enumerate(seeds):
 
             visited_area.append(np.count_nonzero(environment.visited))
 
+    # Plotted Output
     if "colony_food" in config["observables"]:
         plots.colony_food(food_amounts, cycle)
 
-    if "total_ants_efficiency" in config["observables"]:
+    if "ant_efficiency" in config["observables"]:
         plots.ant_efficiency(ants_efficiency, cycle)
 
+    if "success_trips_rate" in config["observables"]:
+        plots.ant_trip_success_rate(success_trip_rate, cycle)
+
+    if "visited_area" in config["observables"]:
+        plots.visited_area(visited_area, cycle)
+
+    if "avg_latest_success_trip" in config["observables"]:
+        plots.average_steps_per_ant(avg_food_trip_length, cycle)
+
+    if "plot_paths" in config["observables"]:
+        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+
+    # Printed Output
     if "time_to_first_path" in config["observables"]:
         if environment.food_at_nest_instances:
             time_to_first_path = min(s for _, s in environment.food_at_nest_instances)
@@ -195,29 +209,16 @@ for cycle, seed in enumerate(seeds):
     if "time_to_shortest_path" in config["observables"]:
         print("Time to Shortest Path:", environment.best_path_found_step)
 
-    if "shortest_path_length" in config["observables"]:
+    if "ant_shortest_path_len" in config["observables"]:
         print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
-
-    if "ant_trip_success_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate, cycle)
-
-    if "area_explored_per_time" in config["observables"]:
-        plots.visited_area(visited_area, cycle)
-
-    if "average_steps_per_ant" in config["observables"]:
-        plots.average_steps_per_ant(avg_food_trip_length, cycle)
-
-    if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
-
-    for i, path in enumerate(environment.real_shortest_paths):
-        print(f"Real Shortest Path Length to Food: {len(path) - 1}")
 
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
     success_trip_rate_rate.append(success_trip_rate)
     visited_amounts.append(visited_area)
 
+for i, path in enumerate(environment.real_shortest_paths):
+    print(f"Real Shortest Path Length to Food: {len(path) - 1}")
 
 food_amount_tot = np.array(food_amount_amounts)
 ants_efficiency_tot = np.array(ants_efficiency_efficiencies)

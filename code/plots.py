@@ -201,7 +201,7 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
     plt.title(f"Rate of Successful Trips: Cycle #{cycle}")
-    fig.savefig(f"images/{cycle}/success_trips.png")
+    fig.savefig(f"images/{cycle}/success_trips_rate.png")
     plt.close()
 
 
@@ -217,7 +217,7 @@ def average_steps_per_ant(average_steps_per_ant, cycle):
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
     plt.title(f"Average Length of Successful Trips: Cycle #{cycle}")
-    fig.savefig(f"images/{cycle}/average_length_of_food_trips.png")
+    fig.savefig(f"images/{cycle}/avg_latest_success_trip.png")
     plt.close()
 
 
@@ -342,5 +342,5 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
 
     plt.title("Paths from Colony to Food")
     plt.tight_layout(rect=[0, 0.05, 1, 1])
-    plt.savefig(f"images/{cycle}/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"images/{cycle}/plot_paths.png", dpi=300, bbox_inches="tight")
     plt.close()
