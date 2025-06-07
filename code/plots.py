@@ -231,11 +231,22 @@ def ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step):
 
 def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     stps = np.arange(len(average_steps_per_ant))
+    error_std = bootstrap_error(average_steps_per_ant[1:], 10000)
+
     fig = plt.figure()
     plt.plot(
         stps[1:],
         average_steps_per_ant[1:],
         label="Average Food Trip Length per Ant",
+    )
+
+    plt.fill_between(
+        stps[1:],
+        average_steps_per_ant[1:] - error_std,
+        average_steps_per_ant[1:] + error_std,
+        color="blue",
+        alpha=0.3,
+        label="Std Dev (Bootstrap)",
     )
 
     if ants_dead_at_step > 0:
@@ -249,6 +260,15 @@ def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     plt.title(f"Average Length of Successful Trips: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/avg_latest_success_trip.png")
     plt.close()
+
+
+def bootstrap_error(lengths, B=1000):
+    n = len(lengths)
+    boot_means = []
+    for _ in range(B):
+        sample = np.random.choice(lengths, size=n, replace=True)
+        boot_means.append(np.mean(sample))
+    return np.std(boot_means)
 
 
 def plot_paths_on_grid(environment, all_successful_paths, cycle):
