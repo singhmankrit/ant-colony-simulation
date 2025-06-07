@@ -42,6 +42,7 @@ visited_amounts = []
 time_to_firsts = []
 time_to_shortests = []
 shortest_ant_paths = []
+populations = []
 
 seeds = [random.randint(1, 10000) for _ in range(cycles)]
 for cycle, seed in enumerate(seeds):
@@ -105,14 +106,19 @@ for cycle, seed in enumerate(seeds):
                 plots.draw_world(ax, environment, ant_list, step_number=0)
             else:
                 environment.evaporate_pheromones()
+                ants_alive = 0
                 for ant in ant_list:
                     ant.next_step(frame)
                     if not ant.dead:
                         total_energy_consumed += 1
+                        ants_alive += 1
                     total_successful_trips += ant.success_trip
                     total_completed_trips += ant.completed_trip
                     sum_latest_food_trip_length += ant.last_food_trip_length
                 avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
+                if ants_dead_at_step < 0 and ants_alive == 0:
+                    ants_dead_at_step = step
+                ant_population.append(ants_alive)
 
                 if extension == "elitist":
                     environment.reinforce_best_path()
@@ -240,6 +246,7 @@ for cycle, seed in enumerate(seeds):
     time_to_firsts.append(time_to_first_path)
     time_to_shortests.append(environment.best_path_found_step)
     shortest_ant_paths.append(environment.best_path_length - 1)
+    populations.append(ant_population)
 
 for i, path in enumerate(environment.real_shortest_paths):
     print(f"Real Shortest Path Length to Food: {len(path) - 1}")
@@ -251,6 +258,7 @@ visited_amount_tot = np.array(visited_amounts)
 time_to_first_path_tot = np.array(time_to_firsts)
 time_to_shortest_tot = np.array(time_to_shortests)
 shortest_ant_path_tot = np.array(shortest_ant_paths)
+population_tot = np.array(populations)
 
 food_amount_avg = np.average(food_amount_tot, axis=0)
 ants_efficiency_avg = np.average(ants_efficiency_tot, axis=0)
@@ -259,6 +267,7 @@ visited_amount_avg = np.average(visited_amount_tot, axis=0)
 time_to_first_path_avg = np.average(time_to_first_path_tot)
 time_to_shortest_avg = np.average(time_to_shortest_tot)
 shortest_ant_path_avg = np.average(shortest_ant_path_tot)
+population_avg = np.average(population_tot, axis=0)
 
 food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg)
 ants_efficiency_std = np.std(ants_efficiency_tot, axis=0, mean=ants_efficiency_avg)
@@ -269,6 +278,7 @@ visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
 time_to_first_path_std = np.std(time_to_first_path_tot, mean=time_to_first_path_avg)
 time_to_shortest_std = np.std(time_to_shortest_tot, mean=time_to_shortest_avg)
 shortest_ant_path_std = np.std(shortest_ant_path_tot, mean=shortest_ant_path_avg)
+population_std = np.std(population_tot, axis=0, mean=population_avg)
 
 print(
     f"Average Time to First Path: {time_to_first_path_avg} +/- {round(time_to_first_path_std, 2)}"
@@ -353,6 +363,24 @@ plt.xlabel("Step")
 plt.ylabel("Visited Area")
 plt.legend()
 plt.savefig("images/global_visited_area.png")
+plt.close()
+
+# Population plot
+plt.figure(figsize=(8, 5))
+plt.plot(x, population_avg, label="Ant Population Avg", color="orange")
+plt.fill_between(
+    x,
+    population_avg - population_std,
+    population_avg + population_std,
+    color="orange",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Ant Population: Avg Over Cycles")
+plt.xlabel("Step")
+plt.ylabel("Number of Ants Alive")
+plt.legend()
+plt.savefig("images/global_population.png")
 plt.close()
 
 print("Plots saved to the 'images/' folder.")
