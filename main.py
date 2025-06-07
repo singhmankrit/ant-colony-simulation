@@ -87,6 +87,8 @@ for cycle, seed in enumerate(seeds):
         fig, ax = plt.subplots()
 
         def update(frame):
+            if frame >= config["frames"]:
+                return
             global total_energy_consumed
             ax.clear()
             food_amounts.append(environment.colony_food)
