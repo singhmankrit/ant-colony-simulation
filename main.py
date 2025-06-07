@@ -202,6 +202,7 @@ for cycle, seed in enumerate(seeds):
         plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
 
     # Printed Output
+    print(f"Cycle: {cycle}")
     if "time_to_first_path" in config["observables"]:
         if environment.food_at_nest_instances:
             time_to_first_path = min(s for _, s in environment.food_at_nest_instances)
