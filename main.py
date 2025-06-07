@@ -43,6 +43,7 @@ time_to_firsts = []
 time_to_shortests = []
 shortest_ant_paths = []
 populations = []
+all_successful_paths_ever = []
 
 seeds = [random.randint(1, 10000) for _ in range(cycles)]
 for cycle, seed in enumerate(seeds):
@@ -247,6 +248,9 @@ for cycle, seed in enumerate(seeds):
     time_to_shortests.append(environment.best_path_found_step)
     shortest_ant_paths.append(environment.best_path_length - 1)
     populations.append(ant_population)
+    all_successful_paths_ever.append(all_successful_paths)
+
+plots.plot_global_paths_on_grid(environment, all_successful_paths_ever)
 
 for i, path in enumerate(environment.real_shortest_paths):
     print(f"Real Shortest Path Length to Food: {len(path) - 1}")
