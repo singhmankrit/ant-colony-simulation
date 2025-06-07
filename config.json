@@ -16,7 +16,8 @@
     "success_trips_rate",
     "visited_area",
     "avg_latest_success_trip",
-    "plot_paths"
+    "plot_paths",
+    "population"
   ],
   "seed": 42,
   "cycles": 50,

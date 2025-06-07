@@ -141,7 +141,7 @@ def draw_world(ax, grid, ants, step_number):
     )
 
 
-def colony_food(food_gathered, cycle):
+def colony_food(food_gathered, cycle, ants_dead_at_step):
     stps = np.arange(len(food_gathered))
     fig = plt.figure()
     plt.plot(
@@ -149,6 +149,12 @@ def colony_food(food_gathered, cycle):
         food_gathered[1:],
         label="Colony Food",
     )
+
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Food at Colony")
@@ -157,7 +163,7 @@ def colony_food(food_gathered, cycle):
     plt.close()
 
 
-def ant_efficiency(ants_efficiency, cycle):
+def ant_efficiency(ants_efficiency, cycle, ants_dead_at_step):
     stps = np.arange(len(ants_efficiency))
     fig = plt.figure()
     plt.plot(
@@ -165,6 +171,12 @@ def ant_efficiency(ants_efficiency, cycle):
         ants_efficiency[1:],
         label="Ant Efficiency",
     )
+
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Collected Food / Consumed Energy")
@@ -173,7 +185,7 @@ def ant_efficiency(ants_efficiency, cycle):
     plt.close()
 
 
-def visited_area(areas, cycle):
+def visited_area(areas, cycle, ants_dead_at_step):
     stps = np.arange(len(areas))
     fig = plt.figure()
     plt.plot(
@@ -181,6 +193,12 @@ def visited_area(areas, cycle):
         areas,
         label="Visited Area",
     )
+
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Visited Area")
@@ -189,7 +207,7 @@ def visited_area(areas, cycle):
     plt.close()
 
 
-def ant_trip_success_rate(success_trip_rate, cycle):
+def ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step):
     stps = np.arange(len(success_trip_rate))
     fig = plt.figure()
     plt.plot(
@@ -197,6 +215,12 @@ def ant_trip_success_rate(success_trip_rate, cycle):
         success_trip_rate[1:],
         label="Success Trip Rate",
     )
+
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
@@ -205,20 +229,46 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.close()
 
 
-def average_steps_per_ant(average_steps_per_ant, cycle):
+def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
     stps = np.arange(len(average_steps_per_ant))
+    error_std = bootstrap_error(average_steps_per_ant[1:])
+
     fig = plt.figure()
     plt.plot(
         stps[1:],
         average_steps_per_ant[1:],
-        label="average food trip length per ant",
+        label="Average Food Trip Length per Ant",
     )
+
+    plt.fill_between(
+        stps[1:],
+        average_steps_per_ant[1:] - error_std,
+        average_steps_per_ant[1:] + error_std,
+        color="blue",
+        alpha=0.3,
+        label="Std Dev (Bootstrap)",
+    )
+
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
     plt.title(f"Average Length of Successful Trips: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/avg_latest_success_trip.png")
     plt.close()
+
+
+def bootstrap_error(lengths, B=10000):
+    n = len(lengths)
+    boot_means = []
+    for _ in range(B):
+        sample = np.random.choice(lengths, size=n, replace=True)
+        boot_means.append(np.mean(sample))
+    return np.std(boot_means)
 
 
 def plot_paths_on_grid(environment, all_successful_paths, cycle):
@@ -235,7 +285,7 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
     # --- Transparent light yellow colormap ---
     light_yellow_cmap = cm.get_cmap("Wistia", 256)
     colors = light_yellow_cmap(np.linspace(0, 1, 256))
-    colors[:, -1] = np.linspace(0, 0.4, 256)  # transparency from 0 to 0.4
+    colors[:, -1] = np.linspace(0.15, 0.6, 256)
     transparent_yellow_cmap = ListedColormap(colors)
 
     # --- Plotting setup ---
@@ -340,7 +390,129 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
         fontsize=10,
     )
 
-    plt.title("Paths from Colony to Food")
+    plt.title(f"Paths from Colony to Food: Cycle #{cycle}")
     plt.tight_layout(rect=[0, 0.05, 1, 1])
     plt.savefig(f"images/{cycle}/plot_paths.png", dpi=300, bbox_inches="tight")
+    plt.close()
+
+
+def plot_population(ant_population, cycle, ants_dead_at_step):
+    stps = np.arange(len(ant_population))
+    fig = plt.figure()
+    plt.plot(
+        stps[1:],
+        ant_population[1:],
+        label="Ant Population",
+    )
+    if ants_dead_at_step > 0:
+        plt.axvline(
+            x=ants_dead_at_step, color="red", linestyle="--", label="All Ants Dead"
+        )
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Number of Ants Alive")
+    plt.title(f"Ant Population: Cycle #{cycle}")
+    fig.savefig(f"images/{cycle}/population.png")
+    plt.close()
+
+
+def plot_global_paths_on_grid(environment, all_successful_paths_ever):
+    # --- Compute visitation heatmap ---
+    visit_counts = np.zeros((environment.size, environment.size), dtype=int)
+    for all_successful_paths in all_successful_paths_ever:
+        for ant_paths in all_successful_paths:
+            for path in ant_paths:
+                for x, y in path:
+                    visit_counts[x, y] += 1
+
+    max_count = np.max(visit_counts)
+    norm = Normalize(vmin=0, vmax=max_count if max_count > 0 else 1)
+
+    # --- Transparent light yellow colormap ---
+    light_yellow_cmap = cm.get_cmap("Wistia", 256)
+    colors = light_yellow_cmap(np.linspace(0, 1, 256))
+    colors[:, -1] = np.linspace(0.15, 0.6, 256)
+    transparent_yellow_cmap = ListedColormap(colors)
+
+    # --- Plotting setup ---
+    _, ax = plt.subplots(figsize=(6, 7))
+    ax.set_xlim(0, environment.size)
+    ax.set_ylim(0, environment.size)
+    ax.set_xticks(range(environment.size + 1))
+    ax.set_yticks(range(environment.size + 1))
+    ax.set_aspect("equal")
+    ax.grid(color="gray", alpha=0.3)
+
+    # --- Draw environment grid with visit shading ---
+    for x in range(environment.size):
+        for y in range(environment.size):
+            val = environment.grid[x, y]
+
+            visit_value = (
+                transparent_yellow_cmap(norm(visit_counts[x, y]))
+                if visit_counts[x, y] > 0
+                else "white"
+            )
+
+            if val == 1:
+                face_color = "red"  # Colony
+            elif val == 2:
+                face_color = "green"  # Food
+            elif val == 3:
+                face_color = "black"  # Obstacle
+            else:
+                face_color = visit_value
+
+            rect = patches.Rectangle(
+                (x, y), 1, 1, facecolor=face_color, edgecolor="black"
+            )
+            ax.add_patch(rect)
+
+    # --- Plot real shortest paths in blue ---
+    real_length = None
+    for i, path in enumerate(environment.real_shortest_paths):
+        if not path:
+            continue
+        real_length = len(path) - 1
+        for (x1, y1), (x2, y2) in zip(path, path[1:]):
+            ax.arrow(
+                x1 + 0.5,
+                y1 + 0.5,
+                (x2 - x1) * 0.8,
+                (y2 - y1) * 0.8,
+                head_width=0.2,
+                length_includes_head=True,
+                color="blue",
+                alpha=0.8,
+            )
+    # --- Add bottom legend ---
+    legend_elements = []
+
+    if real_length is not None:
+        legend_elements.append(
+            Line2D(
+                [0], [0], color="blue", lw=2, label=f"Shortest Path (L={real_length})"
+            )
+        )
+
+    legend_elements.append(
+        Patch(
+            facecolor=cm.Wistia(0.7),
+            edgecolor="black",
+            label="Visit Frequency for Successful Trips",
+        )
+    )
+
+    ax.legend(
+        handles=legend_elements,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.1),
+        ncol=2,
+        frameon=False,
+        fontsize=10,
+    )
+
+    plt.title("Paths from Colony to Food: Avg Over Cycles")
+    plt.tight_layout(rect=[0, 0.05, 1, 1])
+    plt.savefig(f"images/global_plot_paths.png", dpi=300, bbox_inches="tight")
     plt.close()
