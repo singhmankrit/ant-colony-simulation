@@ -229,13 +229,17 @@ for cycle, seed in enumerate(seeds):
         if environment.food_at_nest_instances:
             time_to_first_path = min(s for _, s in environment.food_at_nest_instances)
         else:
-            time_to_first_path = None
+            time_to_first_path = np.nan
         print("Time to First Path:", time_to_first_path)
 
     if "time_to_shortest_path" in config["observables"]:
+        if environment.best_path_found_step == 0:
+            environment.best_path_found_step = np.nan
         print("Time to Shortest Path:", environment.best_path_found_step)
 
     if "ant_shortest_path_len" in config["observables"]:
+        if environment.best_path_length == float("inf"):
+            environment.best_path_length = np.nan
         print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
 
     print("=========================")
@@ -272,9 +276,9 @@ food_amount_avg = np.average(food_amount_tot, axis=0)
 ants_efficiency_avg = np.average(ants_efficiency_tot, axis=0)
 success_trip_rate_avg = np.average(success_trip_rate_tot, axis=0)
 visited_amount_avg = np.average(visited_amount_tot, axis=0)
-time_to_first_path_avg = np.average(time_to_first_path_tot)
-time_to_shortest_avg = np.average(time_to_shortest_tot)
-shortest_ant_path_avg = np.average(shortest_ant_path_tot)
+time_to_first_path_avg = np.nanmean(time_to_first_path_tot)
+time_to_shortest_avg = np.nanmean(time_to_shortest_tot)
+shortest_ant_path_avg = np.nanmean(shortest_ant_path_tot)
 population_avg = np.average(population_tot, axis=0)
 avg_food_trip_avg = np.average(avg_food_trip_tot, axis=0)
 
@@ -291,13 +295,13 @@ success_trip_rate_std = np.std(
 visited_amount_std = np.std(
     visited_amount_tot, axis=0, mean=visited_amount_avg
 ) / np.sqrt(cycles)
-time_to_first_path_std = np.std(
+time_to_first_path_std = np.nanstd(
     time_to_first_path_tot, mean=time_to_first_path_avg
 ) / np.sqrt(cycles)
-time_to_shortest_std = np.std(
+time_to_shortest_std = np.nanstd(
     time_to_shortest_tot, mean=time_to_shortest_avg
 ) / np.sqrt(cycles)
-shortest_ant_path_std = np.std(
+shortest_ant_path_std = np.nanstd(
     shortest_ant_path_tot, mean=shortest_ant_path_avg
 ) / np.sqrt(cycles)
 population_std = np.std(population_tot, axis=0, mean=population_avg) / np.sqrt(cycles)
