@@ -66,7 +66,7 @@ class Ant:
             path_length = len(self.path_memory)
             if path_length > 0:
                 self.pheromone_strength = 1 / path_length
-            print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
+            # print(f"\033[94m{self.name}\033[0m picked up food at step: {step_number}")
 
         elif self.pos == self.grid.colony_position:
             self.completed_trip += 1
@@ -76,17 +76,17 @@ class Ant:
                 self.grid.update_best_path(self.food_path, step_number)
                 self.grid.colony_food += self.carry_amount
                 self.grid.food_at_nest_instances.append((self.name, step_number))
-                print(
-                    f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
-                )
+                # print(
+                #     f"\033[94m{self.name}\033[0m dropped food at step: {step_number}, there is now \033[92m{self.grid.colony_food}\033[0m at the colony"
+                # )
                 self.success_trip += 1
                 self.last_food_trip_length = len(self.food_path) - 1
                 self.all_successful_paths.append(self.food_path)
             self.energy += self.grid.try_get_food(self.max_energy - self.energy)
             if self.energy == 0:
-                print(
-                    f"\033[31m{self.name}\033[0m died from starvation at step: {step_number}"
-                )
+                # print(
+                #     f"\033[31m{self.name}\033[0m died from starvation at step: {step_number}"
+                # )
                 self.dead = True
             self.path_memory = []
             self.pheromone_strength = 0
