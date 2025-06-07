@@ -8,13 +8,15 @@
   "enable_hunger": true,
   "colony_start_amount": 2500,
   "observables": [
-    "total_ants_efficiency",
+    "colony_food",
+    "ant_efficiency",
     "time_to_first_path",
     "time_to_shortest_path",
-    "shortest_path_length",
-    "ant_trip_success_rate",
-    "average_steps_per_ant",
-    "area_explored_per_time"
+    "ant_shortest_path_len",
+    "success_trips_rate",
+    "visited_area",
+    "avg_latest_success_trip",
+    "plot_paths"
   ],
   "seed": 42,
   "cycles": 50,

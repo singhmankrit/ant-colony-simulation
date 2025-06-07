@@ -147,12 +147,12 @@ def colony_food(food_gathered, cycle):
     plt.plot(
         stps[1:],
         food_gathered[1:],
-        label="colony food",
+        label="Colony Food",
     )
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Food at Colony")
-    plt.title("Food Available at Colony Over Time")
+    plt.title(f"Food Available at Colony: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/colony_food.png")
     plt.close()
 
@@ -163,12 +163,12 @@ def ant_efficiency(ants_efficiency, cycle):
     plt.plot(
         stps[1:],
         ants_efficiency[1:],
-        label="ant efficiency",
+        label="Ant Efficiency",
     )
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Collected Food / Consumed Energy")
-    plt.title("Total Ant Efficiency Over Time")
+    plt.title(f"Ant Efficiency: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/ant_efficiency.png")
     plt.close()
 
@@ -179,12 +179,12 @@ def visited_area(areas, cycle):
     plt.plot(
         stps,
         areas,
-        label="visited area",
+        label="Visited Area",
     )
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Visited Area")
-    plt.title("Area explored by the colony")
+    plt.title(f"Area explored by the colony: Cycle #{cycle}")
     fig.savefig(f"images/{cycle}/visited_area.png")
     plt.close()
 
@@ -195,13 +195,13 @@ def ant_trip_success_rate(success_trip_rate, cycle):
     plt.plot(
         stps[1:],
         success_trip_rate[1:],
-        label="rate of successful trips",
+        label="Success Trip Rate",
     )
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Successful Trips / Total Completed Trips")
-    plt.title("Rate of Successful Trips Over Time")
-    fig.savefig(f"images/{cycle}/success_trips.png")
+    plt.title(f"Rate of Successful Trips: Cycle #{cycle}")
+    fig.savefig(f"images/{cycle}/success_trips_rate.png")
     plt.close()
 
 
@@ -216,8 +216,8 @@ def average_steps_per_ant(average_steps_per_ant, cycle):
     plt.legend()
     plt.xlabel("Step")
     plt.ylabel("Length of Latest Successful Trips / Total Ants")
-    plt.title("Average Length of Successful Trips Over Time")
-    fig.savefig(f"images/{cycle}/average_length_of_food_trips.png")
+    plt.title(f"Average Length of Successful Trips: Cycle #{cycle}")
+    fig.savefig(f"images/{cycle}/avg_latest_success_trip.png")
     plt.close()
 
 
@@ -342,5 +342,5 @@ def plot_paths_on_grid(environment, all_successful_paths, cycle):
 
     plt.title("Paths from Colony to Food")
     plt.tight_layout(rect=[0, 0.05, 1, 1])
-    plt.savefig(f"images/{cycle}/shortest_paths.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"images/{cycle}/plot_paths.png", dpi=300, bbox_inches="tight")
     plt.close()

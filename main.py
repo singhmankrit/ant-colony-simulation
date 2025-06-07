@@ -77,6 +77,8 @@ for cycle, seed in enumerate(seeds):
     success_trip_rate = []
     avg_food_trip_length = []
     total_energy_consumed = 0
+    avg_food_trip_length = []
+    all_successful_paths = []
 
     output_path = f"images/{cycle}/ant_animation.mp4"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -85,6 +87,8 @@ for cycle, seed in enumerate(seeds):
         fig, ax = plt.subplots()
 
         def update(frame):
+            if frame >= config["frames"]:
+                return
             global total_energy_consumed
             ax.clear()
             food_amounts.append(environment.colony_food)
@@ -112,7 +116,7 @@ for cycle, seed in enumerate(seeds):
 
                 plots.draw_world(ax, environment, ant_list, frame)
 
-            if "total_ants_efficiency" in config["observables"]:
+            if "ant_efficiency" in config["observables"]:
                 total_collected = (
                     len(environment.food_at_nest_instances) * config["ant_carry_amount"]
                 )
@@ -120,13 +124,16 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if "ant_trip_success_rate" in config["observables"]:
+            if "success_trips_rate" in config["observables"]:
                 if total_completed_trips == 0:
                     success_trip_rate.append(np.nan)
                 else:
                     success_trip_rate.append(
                         total_successful_trips / total_completed_trips
                     )
+
+        for ant in ant_list:
+            all_successful_paths.append(ant.all_successful_paths)
 
         # Animate
         ani = animation.FuncAnimation(
@@ -156,7 +163,7 @@ for cycle, seed in enumerate(seeds):
             if extension == "elitist":
                 environment.reinforce_best_path()
 
-            if "total_ants_efficiency" in config["observables"]:
+            if "ant_efficiency" in config["observables"]:
                 total_collected = (
                     len(environment.food_at_nest_instances) * config["ant_carry_amount"]
                 )
@@ -164,7 +171,7 @@ for cycle, seed in enumerate(seeds):
                 efficiency = total_collected / (total_energy_consumed + 1e-3)
                 ants_efficiency.append(round(efficiency, 2))
 
-            if "ant_trip_success_rate" in config["observables"]:
+            if "success_trips_rate" in config["observables"]:
                 if total_completed_trips == 0:
                     success_trip_rate.append(np.nan)
                 else:
@@ -174,12 +181,30 @@ for cycle, seed in enumerate(seeds):
 
             visited_area.append(np.count_nonzero(environment.visited))
 
+        for ant in ant_list:
+            all_successful_paths.append(ant.all_successful_paths)
+
+    # Plotted Output
     if "colony_food" in config["observables"]:
         plots.colony_food(food_amounts, cycle)
 
-    if "total_ants_efficiency" in config["observables"]:
+    if "ant_efficiency" in config["observables"]:
         plots.ant_efficiency(ants_efficiency, cycle)
 
+    if "success_trips_rate" in config["observables"]:
+        plots.ant_trip_success_rate(success_trip_rate, cycle)
+
+    if "visited_area" in config["observables"]:
+        plots.visited_area(visited_area, cycle)
+
+    if "avg_latest_success_trip" in config["observables"]:
+        plots.average_steps_per_ant(avg_food_trip_length, cycle)
+
+    if "plot_paths" in config["observables"]:
+        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+
+    # Printed Output
+    print(f"Cycle: {cycle}")
     if "time_to_first_path" in config["observables"]:
         if environment.food_at_nest_instances:
             time_to_first_path = min(s for _, s in environment.food_at_nest_instances)
@@ -190,35 +215,18 @@ for cycle, seed in enumerate(seeds):
     if "time_to_shortest_path" in config["observables"]:
         print("Time to Shortest Path:", environment.best_path_found_step)
 
-    if "shortest_path_length" in config["observables"]:
-        print("Shortest Path Length:", environment.best_path_length)
-
-    if "ant_trip_success_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate, cycle)
-
-    if "area_explored_per_time" in config["observables"]:
-        plots.visited_area(visited_area, cycle)
-
-    for i, path in enumerate(environment.real_shortest_paths):
-        print(f"Real Shortest Path Length to Food: {len(path) - 1}")
-
-    if "shortest_path_length" in config["observables"]:
+    if "ant_shortest_path_len" in config["observables"]:
         print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
 
-    if "ant_trip_success_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate, cycle)
-
-    if "average_steps_per_ant" in config["observables"]:
-        plots.average_steps_per_ant(avg_food_trip_length, cycle)
-
-    if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+    print("=========================")
 
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
     success_trip_rate_rate.append(success_trip_rate)
     visited_amounts.append(visited_area)
 
+for i, path in enumerate(environment.real_shortest_paths):
+    print(f"Real Shortest Path Length to Food: {len(path) - 1}")
 
 food_amount_tot = np.array(food_amount_amounts)
 ants_efficiency_tot = np.array(ants_efficiency_efficiencies)
@@ -239,9 +247,9 @@ visited_amount_std = np.std(visited_amount_tot, axis=0, mean=visited_amount_avg)
 
 x = np.arange(config["frames"])  # x-axis points
 
-# Food Amount plot
+# Colony Food plot
 plt.figure(figsize=(8, 5))
-plt.plot(x, food_amount_avg, label="Food Amount Avg", color="blue")
+plt.plot(x, food_amount_avg, label="Colony Food Avg", color="blue")
 plt.fill_between(
     x,
     food_amount_avg - food_amount_std,
@@ -250,16 +258,16 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Food Amount")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Food Amount")
+plt.title("Food Available at Colony: Avg Over Cycles")
+plt.xlabel("Step")
+plt.ylabel("Food at Colony")
 plt.legend()
-plt.savefig("images/food_amount.png")
+plt.savefig("images/global_colony_food.png")
 plt.close()
 
-# Ants Efficiency plot
+# Ant Efficiency plot
 plt.figure(figsize=(8, 5))
-plt.plot(x, ants_efficiency_avg, label="Ants Efficiency Avg", color="green")
+plt.plot(x, ants_efficiency_avg, label="Ant Efficiency Avg", color="green")
 plt.fill_between(
     x,
     ants_efficiency_avg - ants_efficiency_std,
@@ -268,11 +276,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Ants Efficiency")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Efficiency")
+plt.title("Ant Efficiency: Avg Over Cycles")
+plt.xlabel("Step")
+plt.ylabel("Collected Food / Consumed Energy")
 plt.legend()
-plt.savefig("images/ants_efficiency.png")
+plt.savefig("images/global_ant_efficiency.png")
 plt.close()
 
 # Success Trip Rate plot
@@ -286,11 +294,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Success Trip Rate")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Trip Rate")
+plt.title("Rate of Successful Trips: Avg Over Cycles")
+plt.xlabel("Step")
+plt.ylabel("Successful Trips / Total Completed Trips")
 plt.legend()
-plt.savefig("images/success_trip_rate.png")
+plt.savefig("images/global_success_trips_rate.png")
 plt.close()
 
 # Visited Amount plot
@@ -304,11 +312,11 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.title("Visited Amount")
-plt.xlabel("X-axis Label")  # Change as appropriate
-plt.ylabel("Visited Amount")
+plt.title("Area explored by the colony: Avg Over Cycles")
+plt.xlabel("Step")
+plt.ylabel("Visited Area")
 plt.legend()
-plt.savefig("images/visited_amount.png")
+plt.savefig("images/global_visited_area.png")
 plt.close()
 
 print("Plots saved to the 'images/' folder.")
