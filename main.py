@@ -212,6 +212,8 @@ for cycle, seed in enumerate(seeds):
     if "ant_shortest_path_len" in config["observables"]:
         print(f"Shortest Path Length found by Ants: {environment.best_path_length - 1}")
 
+    print("=========================")
+
     food_amount_amounts.append(food_amounts)
     ants_efficiency_efficiencies.append(ants_efficiency)
     success_trip_rate_rate.append(success_trip_rate)
@@ -290,7 +292,7 @@ plt.title("Rate of Successful Trips: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Successful Trips / Total Completed Trips")
 plt.legend()
-plt.savefig("images/global_success_trips.png")
+plt.savefig("images/global_success_trips_rate.png")
 plt.close()
 
 # Visited Amount plot
