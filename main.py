@@ -269,8 +269,10 @@ for cycle, seed in enumerate(seeds):
 
 plots.plot_global_paths_on_grid(environment, all_successful_paths_ever)
 
+real_shortest_path = float("inf")
 for i, path in enumerate(environment.real_shortest_paths):
-    print(f"Real Shortest Path Length to Food: {len(path) - 1}")
+    real_shortest_path = len(path)
+    print(f"Real Shortest Path Length to Food: {real_shortest_path}")
 
 # Totals
 food_amount_tot = np.array(food_amount_amounts)
@@ -435,12 +437,36 @@ plt.fill_between(
     alpha=0.3,
     label="Std Dev",
 )
-plt.axhline(y=(len(path) - 1), color="blue", linestyle="--", label="Real Shortest Path")
+plt.axhline(
+    y=real_shortest_path, color="blue", linestyle="--", label="Real Shortest Path"
+)
 plt.title("Average Length of Successful Trips: Avg Over Cycles")
 plt.xlabel("Step")
 plt.ylabel("Length of Latest Successful Trips / Total Ants")
 plt.legend()
 plt.savefig("images/global_avg_latest_success_trip.png")
 plt.close()
+
+# Simulate Best Path
+best_food = config["colony_start_amount"]
+colony_best_food = []
+ants_best_efficiency = []
+total_food_collected = 0
+total_energy_consumed = 0
+for step in range(config["frames"]):
+    trip_length = 2 * real_shortest_path
+    if step > 0 and step % trip_length == 0:
+        total_food_collected += config["num_ants"] * config["ant_carry_amount"]
+        total_energy_consumed += config["num_ants"] * trip_length
+
+        best_food += total_food_collected
+        best_food -= total_energy_consumed
+    colony_best_food.append(best_food)
+
+    efficiency = total_food_collected / (total_energy_consumed + 1e-3)
+    ants_best_efficiency.append(round(efficiency, 2))
+
+plots.colony_food(colony_best_food, "best", -1)
+plots.ant_efficiency(ants_best_efficiency, "best", -1)
 
 print("Plots saved to the 'images/' folder.")
