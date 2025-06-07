@@ -108,6 +108,7 @@ for cycle, seed in enumerate(seeds):
             else:
                 environment.evaporate_pheromones()
                 ants_alive = 0
+                productive_ants = 0
                 for ant in ant_list:
                     ant.next_step(frame)
                     if not ant.dead:
@@ -117,7 +118,12 @@ for cycle, seed in enumerate(seeds):
                     total_completed_trips += ant.completed_trip
                     if ant.last_food_trip_length > 0:
                         sum_latest_food_trip_length += ant.last_food_trip_length
-                avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
+                        productive_ants += 1
+                if productive_ants == 0:
+                    productive_ants = 1
+                avg_food_trip_length.append(
+                    sum_latest_food_trip_length / productive_ants
+                )
                 if ants_dead_at_step < 0 and ants_alive == 0:
                     ants_dead_at_step = step
                 ant_population.append(ants_alive)
@@ -165,6 +171,7 @@ for cycle, seed in enumerate(seeds):
             sum_latest_food_trip_length = 0
             environment.evaporate_pheromones()
             ants_alive = 0
+            productive_ants = 0
             for ant in ant_list:
                 ant.next_step(step)
                 if not ant.dead:
@@ -174,7 +181,10 @@ for cycle, seed in enumerate(seeds):
                 total_completed_trips += ant.completed_trip
                 if ant.last_food_trip_length > 0:
                     sum_latest_food_trip_length += ant.last_food_trip_length
-            avg_food_trip_length.append(sum_latest_food_trip_length / len(ant_list))
+                    productive_ants += 1
+            if productive_ants == 0:
+                productive_ants = 1
+            avg_food_trip_length.append(sum_latest_food_trip_length / productive_ants)
             if ants_dead_at_step < 0 and ants_alive == 0:
                 ants_dead_at_step = step
             ant_population.append(ants_alive)
