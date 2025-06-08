@@ -37,6 +37,7 @@ class Grid:
         self.best_path = None
         self.best_path_length = float("inf")
         self.best_path_found_step = 0
+        self.best_path_lengths = []
         self.elitist_ant_count = elitist_ant_count
         self.pheromone_constant = pheromone_constant
 
@@ -53,6 +54,9 @@ class Grid:
     def add_obstacle(self, position):
         self.obstacle_positions.append(position)
         self.grid[position] = CellType.OBSTACLE.value
+
+    def save_best_path(self):
+        self.best_path_lengths.append(self.best_path_length)
 
     def evaporate_pheromones(self):
         self.food_path *= 1 - self.pheromone_decay

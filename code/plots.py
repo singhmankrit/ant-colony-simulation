@@ -516,3 +516,20 @@ def plot_global_paths_on_grid(environment, all_successful_paths_ever):
     plt.tight_layout(rect=[0, 0.05, 1, 1])
     plt.savefig(f"images/global_plot_paths.png", dpi=300, bbox_inches="tight")
     plt.close()
+
+
+def plot_best_paths(path_lengths, cycle):
+    stps = np.arange(len(path_lengths))
+    fig = plt.figure()
+    plt.plot(
+        stps,
+        path_lengths,
+        label="Best path length",
+    )
+
+    plt.legend()
+    plt.xlabel("Step")
+    plt.ylabel("Shortest path length")
+    plt.title(f"Best path length: Cycle #{cycle}")
+    fig.savefig(f"images/{cycle}/best_path_length.png")
+    plt.close()
