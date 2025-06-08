@@ -213,27 +213,28 @@ for cycle, seed in enumerate(seeds):
         for ant in ant_list:
             all_successful_paths.append(ant.all_successful_paths)
 
-    # Plotted Output
-    if "colony_food" in config["observables"]:
-        plots.colony_food(food_amounts, cycle, ants_dead_at_step)
+    if config["cycle_plots"]:
+        # Plotted Output
+        if "colony_food" in config["observables"]:
+            plots.colony_food(food_amounts, cycle, ants_dead_at_step)
 
-    if "ant_efficiency" in config["observables"]:
-        plots.ant_efficiency(ants_efficiency, cycle, ants_dead_at_step)
+        if "ant_efficiency" in config["observables"]:
+            plots.ant_efficiency(ants_efficiency, cycle, ants_dead_at_step)
 
-    if "success_trips_rate" in config["observables"]:
-        plots.ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step)
+        if "success_trips_rate" in config["observables"]:
+            plots.ant_trip_success_rate(success_trip_rate, cycle, ants_dead_at_step)
 
-    if "visited_area" in config["observables"]:
-        plots.visited_area(visited_area, cycle, ants_dead_at_step)
+        if "visited_area" in config["observables"]:
+            plots.visited_area(visited_area, cycle, ants_dead_at_step)
 
-    if "avg_latest_success_trip" in config["observables"]:
-        plots.average_steps_per_ant(avg_food_trip_length, cycle, ants_dead_at_step)
+        if "avg_latest_success_trip" in config["observables"]:
+            plots.average_steps_per_ant(avg_food_trip_length, cycle, ants_dead_at_step)
 
-    if "plot_paths" in config["observables"]:
-        plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
+        if "plot_paths" in config["observables"]:
+            plots.plot_paths_on_grid(environment, all_successful_paths, cycle)
 
-    if "population" in config["observables"]:
-        plots.plot_population(ant_population, cycle, ants_dead_at_step)
+        if "population" in config["observables"]:
+            plots.plot_population(ant_population, cycle, ants_dead_at_step)
 
     # Printed Output
     print(f"Cycle: {cycle}")

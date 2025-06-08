@@ -27,4 +27,5 @@ def parse_config(path: str) -> dict[str, Any]:
         "extension": config.get("extension", "none"),
         "elitist_ant_count": config.get("elitist_ant_count", 5),
         "pheromone_constant": config.get("pheromone_constant", 1.0),
+        "cycle_plots": config.get("cycle_plots", True),
     }
