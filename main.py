@@ -466,6 +466,8 @@ for step in range(config["frames"]):
     efficiency = total_food_collected / (total_energy_consumed + 1e-3)
     ants_best_efficiency.append(round(efficiency, 2))
 
+output_path = "images/best/ant_animation.mp4"
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
 plots.colony_food(colony_best_food, "best", -1)
 plots.ant_efficiency(ants_best_efficiency, "best", -1)
 
