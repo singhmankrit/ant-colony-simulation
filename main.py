@@ -45,6 +45,7 @@ shortest_ant_paths = []
 populations = []
 all_successful_paths_ever = []
 avg_food_trip_lengths = []
+best_path_lengths = []
 
 seeds = [random.randint(1, 10000) for _ in range(cycles)]
 for cycle, seed in enumerate(seeds):
@@ -130,6 +131,7 @@ for cycle, seed in enumerate(seeds):
 
                 if extension == "elitist":
                     environment.reinforce_best_path()
+                environment.save_best_path()
 
                 visited_area.append(np.count_nonzero(environment.visited))
 
@@ -191,6 +193,7 @@ for cycle, seed in enumerate(seeds):
 
             if extension == "elitist":
                 environment.reinforce_best_path()
+            environment.save_best_path()
 
             if "ant_efficiency" in config["observables"]:
                 total_collected = (
@@ -236,6 +239,9 @@ for cycle, seed in enumerate(seeds):
         if "population" in config["observables"]:
             plots.plot_population(ant_population, cycle, ants_dead_at_step)
 
+        if "best_paths" in config["observables"]:
+            plots.plot_best_paths(environment.best_path_lengths, cycle)
+
     # Printed Output
     print(f"Cycle: {cycle}")
     if "time_to_first_path" in config["observables"]:
@@ -265,6 +271,7 @@ for cycle, seed in enumerate(seeds):
     time_to_shortests.append(environment.best_path_found_step)
     shortest_ant_paths.append(environment.best_path_length - 1)
     populations.append(ant_population)
+    best_path_lengths.append(environment.best_path_lengths)
     all_successful_paths_ever.append(all_successful_paths)
     avg_food_trip_lengths.append(avg_food_trip_length)
 
@@ -285,6 +292,7 @@ time_to_shortest_tot = np.array(time_to_shortests)
 shortest_ant_path_tot = np.array(shortest_ant_paths)
 population_tot = np.array(populations)
 avg_food_trip_tot = np.array(avg_food_trip_lengths)
+best_path_lengths = np.array(best_path_lengths)
 
 # Averages
 food_amount_avg = np.average(food_amount_tot, axis=0)
@@ -296,6 +304,7 @@ time_to_shortest_avg = np.nanmean(time_to_shortest_tot)
 shortest_ant_path_avg = np.nanmean(shortest_ant_path_tot)
 population_avg = np.average(population_tot, axis=0)
 avg_food_trip_avg = np.average(avg_food_trip_tot, axis=0)
+best_path_length_avg = np.average(best_path_lengths, axis=0)
 
 # Standard Deviations
 food_amount_std = np.std(food_amount_tot, axis=0, mean=food_amount_avg) / np.sqrt(
@@ -323,6 +332,9 @@ population_std = np.std(population_tot, axis=0, mean=population_avg) / np.sqrt(c
 avg_food_trip_std = np.std(avg_food_trip_tot, axis=0, mean=avg_food_trip_avg) / np.sqrt(
     cycles
 )
+best_path_length_std = np.std(
+    best_path_lengths, axis=0, mean=best_path_length_avg
+) / np.sqrt(cycles)
 
 print(
     f"Average Time to First Path: {time_to_first_path_avg} +/- {round(time_to_first_path_std, 2)}"
@@ -471,5 +483,23 @@ output_path = "images/best/ant_animation.mp4"
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 plots.colony_food(colony_best_food, "best", -1)
 plots.ant_efficiency(ants_best_efficiency, "best", -1)
+
+plt.figure(figsize=(8, 5))
+plt.plot(x, best_path_length_avg, label="Avg best path length", color="deeppink")
+plt.fill_between(
+    x,
+    best_path_length_avg - best_path_length_std,
+    best_path_length_avg + best_path_length_std,
+    color="deeppink",
+    alpha=0.3,
+    label="Std Dev",
+)
+plt.title("Average Length Best Path: Avg Over Cycles")
+plt.xlabel("Step")
+plt.xlim(-40, 1040)
+plt.ylabel("Length of best path")
+plt.legend()
+plt.savefig("images/global_avg_best_path_length.png")
+plt.close()
 
 print("Plots saved to the 'images/' folder.")
