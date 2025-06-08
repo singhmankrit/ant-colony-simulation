@@ -496,7 +496,7 @@ plt.fill_between(
 )
 plt.title("Average Length Best Path: Avg Over Cycles")
 plt.xlabel("Step")
-plt.xlim(-40, 1040)
+plt.xlim(-40, config["frames"] + 40)
 plt.ylabel("Length of best path")
 plt.legend()
 plt.savefig("images/global_avg_best_path_length.png")
