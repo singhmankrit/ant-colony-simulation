@@ -271,7 +271,7 @@ plots.plot_global_paths_on_grid(environment, all_successful_paths_ever)
 
 real_shortest_path = float("inf")
 for i, path in enumerate(environment.real_shortest_paths):
-    real_shortest_path = len(path)
+    real_shortest_path = len(path) - 1
     print(f"Real Shortest Path Length to Food: {real_shortest_path}")
 
 # Totals
