@@ -20,12 +20,13 @@
     "population"
   ],
   "seed": 42,
-  "cycles": 50,
-  "frames": 1000,
+  "cycles": 100,
+  "frames": 4000,
   "frame_interval": 200,
   "video_output": "images/ant_simulation.mp4",
   "mode": "no_backtracking",
   "extension": "none",
   "elitist_ant_count": 5,
+  "cycle_plots": false,
   "pheromone_constant": 0.01
 }
