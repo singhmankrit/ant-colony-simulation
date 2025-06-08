@@ -264,10 +264,10 @@ def average_steps_per_ant(average_steps_per_ant, cycle, ants_dead_at_step):
 
 def bootstrap_error(lengths, B=10000):
     n = len(lengths)
-    boot_means = []
-    for _ in range(B):
+    boot_means = np.zeros((B,))
+    for i in range(B):
         sample = np.random.choice(lengths, size=n, replace=True)
-        boot_means.append(np.mean(sample))
+        boot_means[i] = np.mean(sample)
     return np.std(boot_means)
 
 
