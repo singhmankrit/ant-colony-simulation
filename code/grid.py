@@ -56,7 +56,7 @@ class Grid:
         self.grid[position] = CellType.OBSTACLE.value
 
     def save_best_path(self):
-        self.best_path_lengths.append(self.best_path_length)
+        self.best_path_lengths.append(self.best_path_length - 1)
 
     def evaporate_pheromones(self):
         self.food_path *= 1 - self.pheromone_decay
