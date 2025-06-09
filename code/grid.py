@@ -19,6 +19,7 @@ class Grid:
         extension="none",
         elitist_ant_count=None,
         pheromone_constant=None,
+        pheromone_decay=0.01,
     ):
         self.size = size
         self.food_path = np.zeros((size, size, 4), dtype=float)  # pheromones
@@ -27,7 +28,7 @@ class Grid:
         self.colony_position = None
         self.food_positions = []
         self.obstacle_positions = []
-        self.pheromone_decay = 0.01
+        self.pheromone_decay = pheromone_decay
 
         self.food_gathered_instances = []
         self.food_at_nest_instances = []

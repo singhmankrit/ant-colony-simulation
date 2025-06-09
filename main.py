@@ -25,6 +25,7 @@ start_food_amount = config["colony_start_amount"]
 extension = config["extension"]
 elitist_ant_count = config["elitist_ant_count"]
 pheromone_constant = config["pheromone_constant"]
+pheromone_decay = config["pheromone_decay"]
 
 # Set simulation parameters
 seed = config["seed"]
@@ -55,6 +56,7 @@ for cycle, seed in enumerate(seeds):
         start_food_amount=start_food_amount,
         elitist_ant_count=elitist_ant_count,
         pheromone_constant=pheromone_constant,
+        pheromone_decay=pheromone_decay,
     )
     environment.place_colony(tuple(data["colony"]))
     for food in data["food"]:
@@ -95,6 +97,7 @@ for cycle, seed in enumerate(seeds):
         fig, ax = plt.subplots()
 
         def update(frame):
+            global ants_dead_at_step
             if frame >= config["frames"]:
                 return
             global total_energy_consumed
