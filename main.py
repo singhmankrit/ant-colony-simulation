@@ -485,14 +485,17 @@ plots.colony_food(colony_best_food, "best", -1)
 plots.ant_efficiency(ants_best_efficiency, "best", -1)
 
 plt.figure(figsize=(8, 5))
-plt.plot(x, best_path_length_avg, label="Avg best path length", color="deeppink")
+plt.plot(x, best_path_length_avg, label="Avg best path length", color="chocolate")
 plt.fill_between(
     x,
     best_path_length_avg - best_path_length_std,
     best_path_length_avg + best_path_length_std,
-    color="deeppink",
+    color="chocolate",
     alpha=0.3,
     label="Std Dev",
+)
+plt.axhline(
+    y=real_shortest_path, color="blue", linestyle="--", label="Real Shortest Path"
 )
 plt.title("Average Length Best Path: Avg Over Cycles")
 plt.xlabel("Step")
