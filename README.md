@@ -40,3 +40,7 @@ The configuration file uses the json format. The options are listed below with t
 | extension | `"none"` | The extension that affects pheromones. Can be `"none"` or `"elitist"` |
 | elitist_ant_count | `0.01` | The weight given to elitist ant|
 | pheromone_constant | `0.01` | The value by which the best path is scaled by in elitist extension |
+
+
+The Final Presentation can be found at ![](./FinalPresentation.pdf).
+
